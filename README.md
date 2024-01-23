@@ -7,8 +7,8 @@ This browser based web application to ...
 ## 2. Names of Contributors
 List team members and/or short bio's here... 
 * Hi, my name is Anthony! I'm excited to build some cool things.
-* Hi, my name is Andre. I can't wait to build new stuff.
-* ...
+* Hi I am Zion! I am new to Web Dev and Git Hub world! Cant wait to create my project!
+* Hi, my name is Andre. I can't wait to build new stuff
 	
 ## 3. Technologies and Resources Used
 List technologies (with version numbers), API's, icons, fonts, images, media or data sources, and other resources that were used.
