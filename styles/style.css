@@ -37,3 +37,10 @@ img {
   margin: 5%;
   margin-top: 1%;
 }
+
+/* review_form.html */
+#review-form {
+  background-color: #ffffff;
+  margin-top: 3%;
+  padding: 3%;
+}
