@@ -1,1 +1,39 @@
+/* TODO: Change once colour pallete picked*/
+body {
+    background-color: rgb(211, 211, 211);
+}
 
+img {
+  max-width: 100%;
+}
+
+/* review.html */
+.review-rating-btn {
+    border:0;
+}
+
+#review-img {
+  display: grid;
+  justify-items: center;
+  margin: 3%
+}
+
+#review {
+  overflow: hidden;
+  background: #ffffff;
+  margin-top: 5%;
+}
+
+#review-info {
+  padding: 2%;
+  padding-top: 0%;
+}
+
+#review-rating {
+  text-align: end;
+}
+
+#review-content {
+  margin: 5%;
+  margin-top: 1%;
+}
