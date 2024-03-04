@@ -1,68 +1,77 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title id="page-title">To be replaced</title>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-        <!-- Bootstrap Library CSS CDN go here -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <!-- Boostrap Library JS CDN  go here -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous">
+<head>
+    <title id="page-title">To be replaced</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap Library CSS CDN go here -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Boostrap Library JS CDN  go here -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
         </script>
 
-        <!-- Bootstrap icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
-        <link href="styles/style.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg">
-                    <article id="review">
-                        <div class="row" id="review-info">
-                            <div id="review-img" class="col-9">
-                                <img src="https://dummyimage.com/800x400/b3b3b3/000000&text=+" alt="blank placeholder image">
-                            </div>
-                            <div class="col-3">
-                                <h5 id="review-spot">Date spot</h5>
-                                <p id="review-addr">Address</p>
-                            </div>
+    <link href="styles/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- our own navbar goes here -->
+    <nav id="navbarPlaceholder"></nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg">
+                <article id="review">
+                    <div class="row" id="review-info">
+                        <div id="review-img" class="col-9">
+                            <img src="https://dummyimage.com/800x400/b3b3b3/000000&text=+"
+                                alt="blank placeholder image">
                         </div>
-                        <div id="review-body">
-                            <h2 id="review-title">Review Title</h2>
-                            <div class="container">
-                                <div class="row">
-                                    <h5 class="col-2" id="review-authors">Author</h5>
-                                    <time class="col-8" id="review-date">Date</time>
-                                    <div class="col-2 row">
-                                        <p id="review-rating" class="col-8">Rating</p>
-                                        <button class="review-rating-btn col-4" id="review-up"><i class="bi bi-hand-thumbs-up-fill"></i></button>
-                                        <!--
+                        <div class="col-3">
+                            <h5 id="review-spot">Date spot</h5>
+                            <p id="review-addr">Address</p>
+                        </div>
+                    </div>
+                    <div id="review-body">
+                        <h2 id="review-title">Review Title</h2>
+                        <div class="container">
+                            <div class="row">
+                                <h5 class="col-2" id="review-authors">Author</h5>
+                                <time class="col-8" id="review-date">Date</time>
+                                <div class="col-2 row">
+                                    <p id="review-rating" class="col-8">Rating</p>
+                                    <button class="review-rating-btn col-4" id="review-up"><i
+                                            class="bi bi-hand-thumbs-up-fill"></i></button>
+                                    <!--
                                         <button class="review-rating-btn col-sm" id="review-down"><i class="bi bi-hand-thumbs-down-fill"></i></button>
                                         -->
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="review-content">
-                            <p class="card-text placeholder-glow">
-                                <span class="placeholder col-7"></span>
-                                <span class="placeholder col-4"></span>
-                                <span class="placeholder col-4"></span>
-                                <span class="placeholder col-6"></span>
-                                <span class="placeholder col-8"></span>
-                            </p>
-                        </div>
-                    </article>
-                </div>
+                    <div id="review-content">
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-7"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-6"></span>
+                            <span class="placeholder col-8"></span>
+                        </p>
+                    </div>
+                </article>
             </div>
         </div>
-    </body>
+    </div>
+    <!-- our own footer goes here-->
+    <nav id="footerPlaceholder"></nav>
+    <script src="./scripts/skeleton.js"></script>
+</body>
+
 </html>
