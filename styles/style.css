@@ -12,23 +12,19 @@ img {
     border:0;
 }
 
-#review-img {
-  /*
-  display: grid;
-  justify-items: center;
-  */
-  margin: 3%
-}
-
 #review {
   overflow: hidden;
   background: #ffffff;
   margin-top: 5%;
 }
 
-#review-info {
-  padding: 2%;
-  padding-top: 0%;
+#review-info{
+  padding:5%;
+  padding-bottom: 2%;
+}
+
+#review-body {
+  padding: 0% 5%;
 }
 
 #review-rating {
