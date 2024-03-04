@@ -13,8 +13,10 @@ img {
 }
 
 #review-img {
+  /*
   display: grid;
   justify-items: center;
+  */
   margin: 3%
 }
 
@@ -38,8 +40,8 @@ img {
   margin-top: 1%;
 }
 
-/* review_form.html */
-#review-form {
+/* review_form.html, spot_form.html */
+#review-form, #spot-form {
   background-color: #ffffff;
   margin-top: 3%;
   padding: 3%;
