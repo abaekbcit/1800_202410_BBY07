@@ -52,25 +52,14 @@
           </div>
           <!--TODO: Consider relationship between review and date spots. Is specific location
                         data neede?-->
-          <div class="col-md-4">
-            <label for="input-rv-province" class="form-label">Province</label>
-            <select id="input-rv-province" class="form-select" required>
-              <option selected value="">Choose...</option>
-              <option>Alberta</option>
-              <option>British Columbia</option>
-              <option>Manitoba</option>
-              <option>New Brunswick</option>
-              <option>Newfoundland and Labrador</option>
-              <option>Nova Scotia</option>
-              <option>Ontario</option>
-              <option>Prince Edward Island</option>
-              <option>Quebec</option>
-              <option>Saskatchewan</option>
-            </select>
-          </div>
           <div class="col-md-2">
             <label for="input-rv-zip" class="form-label">Zip</label>
             <input type="text" class="form-control" required id="input-rv-zip">
+          </div>              
+          <div class="col-md-4">
+            <label for="customRange3" class="form-label">Date Spot Rating:</label>
+            <output class="mx-2">0/5</output>
+            <input type="range" class="form-range" value="0" min="0" max="5" step="0.5" id="input-rv-spot-rating" oninput='this.previousElementSibling.value = this.value + "/5"'>
           </div>
           <div class="col-12 form-floating">
             <textarea class="form-control" required id="input-rv-textarea" style="height: 100px"></textarea>
