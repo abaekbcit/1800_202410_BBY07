@@ -28,7 +28,8 @@ function addReview(title, spot, addr, city, zip, text, img) {
                 city: city,
                 zip: zip,
                 text: text,
-                img: img
+                img: img,
+                rating: 0
             }).then(function(res) {
                 reviewForm.reset();
                 reviewPostedAlert();
@@ -38,7 +39,6 @@ function addReview(title, spot, addr, city, zip, text, img) {
 }
 
 function reviewPostedAlert() {
-    console.log("called");
     var modal = new bootstrap.Modal(document.getElementById('review-posted-modal')); 
     modal.toggle(); 
 }
@@ -46,5 +46,5 @@ function reviewPostedAlert() {
 let goHome = document.getElementById('rv-post-go-home');
 goHome.addEventListener('click', function(e) {
     window.location.assign("main.html");
-})
+});
 
