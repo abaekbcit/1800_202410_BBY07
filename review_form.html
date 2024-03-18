@@ -15,6 +15,14 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
   <link href="styles/style.css" rel="stylesheet">
 </head>
 
@@ -24,8 +32,8 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-lg" id="review-form">
-        <form class="row g-3">
+      <div class="col-lg">
+        <form class="row g-3" id="review-form">
           <div class="col-md-6">
             <label for="input-rv-title" class="form-label">Title</label>
             <input type="text" class="form-control" required id="input-rv-title">
@@ -79,9 +87,31 @@
       </div>
     </div>
   </div>
+
+  <!--TODO: Maybe change to view post instead of close-->
+  <div id="review-posted-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Review submission</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Review successfully posted.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="rv-post-close">Close</button>
+          <button type="button" class="btn btn-primary" id="rv-post-go-home">Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- our own footer goes here-->
   <nav id="footerPlaceholder"></nav>
+  <script src="./scripts/firebaseAPI_BBY07.js"></script>
   <script src="./scripts/skeleton.js"></script>
+  <script src="./scripts/review.js"></script>
 
 </body>
 
