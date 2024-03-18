@@ -11,7 +11,7 @@ reviewForm.addEventListener('submit', function(e) {
     let text = document.getElementById('input-rv-textarea').value;
     let img = document.getElementById('input-rv-img').value;
     addReview(title, spot, addr, city, zip, spotRating, text, img);
-})
+});
 
 function addReview(title, spot, addr, city, zip, spotRating, text, img) {
     firebase.auth().onAuthStateChanged(function (user) {
