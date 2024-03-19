@@ -24,7 +24,7 @@ function displayReviewInfo() {
             document.getElementById( "review-content" ).innerHTML = text;
             document.getElementById( "review-addr" ).innerHTML = addr + "," + city;
             //TODO: need to displace user name instead of user ID
-            document.getElementById( "review-author" ).innerHTML = "author";
+            document.getElementById( "review-author" ).innerHTML = author;
             document.getElementById( "review-date" ).innerHTML = date;
             document.getElementById( "review-rating" ).innerHTML = rating;
 
