@@ -61,6 +61,9 @@
         <output class="mx-2">0/10000</output>
         <input type="range" class="form-range" value="0" min="0" max="10000" step="100" id="input-rv-spot-rating" oninput='this.previousElementSibling.value = this.value + "/10000"'>
     </div>
+    <button onClick="window.location.reload();" class="button">No</button>
+    <input type="button" class="button2" value="Yes">
+
 
 
     <!---------------------------------------------->
@@ -69,16 +72,7 @@
     <script src="./scripts/firebaseAPI_BBY07.js"></script>
     <script src="./scripts/skeleton.js"></script>
     <script src="./scripts/script.js"></script>
-    <script>
-        var slider = document.getElementById("myRange");
-        var output = document.getElementById("demo");
-        output.innerHTML = slider.value;
-
-        slider.oninput = function () {
-            output.innerHTML = this.value;
-        }
-    </script>
-
+    
 
 </body>
 
