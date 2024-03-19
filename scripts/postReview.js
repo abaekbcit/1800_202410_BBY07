@@ -20,7 +20,8 @@ function addReview(title, spot, addr, city, zip, spotRating, text, img) {
             var reviewsDB = db.collection("reviews");
             reviewsDB.add({
                 title: title,
-                author: userID,
+                authorID: userID,
+                author: user.displayName,
                 date: new Date().toLocaleDateString(),
                 spot: spot,
                 addr: addr,
