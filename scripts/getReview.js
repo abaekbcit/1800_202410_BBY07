@@ -8,6 +8,7 @@ function displayCardsDynamically() {
                 var spot = doc.data().spot;
                 var text = doc.data().text;
                 var city = doc.data().city;
+                var docID = doc.id;
                 let newcard = cardTemplate.content.cloneNode(true);
 
                 newcard.querySelector('.card-title').innerHTML = title;
@@ -15,6 +16,7 @@ function displayCardsDynamically() {
                 newcard.querySelector('.card-image').innerHTML = img;
                 newcard.querySelector('.card-spot').innerHTML = spot;
                 newcard.querySelector('.card-city').innerHTML = city;
+                newcard.querySelector('a').href = "review.html?docID="+docID;
             
                 if (text.length > 20) {
                     text = text.substring(0, 50) + "...";
