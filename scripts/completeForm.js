@@ -8,21 +8,19 @@ function initAutocomplete() {
         {
             types: ['establishment'],
             componentRestrictions: { 'country': ['CA'] },
-            //fields: ["geometry"],
             fields: ['place_id', 'name', 'formatted_address', 'type', 'icon', 'price_level', 'photos'],
-            //types: ['address']
         });
 
     autocomplete.addListener('place_changed', onPlaceChanged);
 }
 
-//TODO: case for when user enters an invalid place redirect to posting manual
 function onPlaceChanged() {
     const place = autocomplete.getPlace();
     if (place.place_id) {
+        document.getElementById('autocomplete').value = place.name;
         document.getElementById('spot-auto-addr').value = place.formatted_address;
-        let name = place.types[0];
-        document.getElementById('spot-auto-category').value = name.charAt(0).toUpperCase() + name.substring(1);
+        let type = place.types[0];
+        document.getElementById('spot-auto-category').value = type.charAt(0).toUpperCase() + type.substring(1);
         document.getElementById('spot-icon').src = place.icon;
         loadCarousel(place.photos);
 
@@ -67,18 +65,6 @@ function tabSelection(event, tab) {
     event.currentTarget.className = "nav-link active spot-tab";
 }
 
-spotSearch.addEventListener('submit', function(e) {
-    e.preventDefault();
-    submitSpotSearch();
-});
-
-//TODO: should only be able submit on login
-function submitSpotSearch() {
-    if (!autocomplete.getPlace() || !autocomplete.getPlace().place_id) {
-        invalidSearchAlert();
-    }
-}
-
 function invalidSearchAlert() {
     var modal = new bootstrap.Modal(document.getElementById('invalid-search-modal')); 
     modal.toggle(); 
@@ -87,3 +73,86 @@ function invalidSearchAlert() {
 document.getElementById('invalid-search-manual').addEventListener('click', function(e) {
     tabSelection({currentTarget: document.getElementById('manual-tab')}, 1);
 })
+
+spotSearch.addEventListener('reset', function(e) {
+    resetSpotSearch();
+});
+
+function resetSpotSearch() {
+    document.getElementById('spot-icon').src = "";
+    document.getElementById('carousel-slide-entrance').innerHTML = "";
+}
+
+spotSearch.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!autocomplete.getPlace() || !autocomplete.getPlace().place_id) {
+        invalidSearchAlert();
+    } else {
+        let place = autocomplete.getPlace();
+        let name = place.name;
+        let category = place.types[0];
+        let price = (place.price_level)? place.price_level : 0;
+        let addrParts = place.formatted_address.split(', ');
+        let addr = addrParts[0];
+        let city = addrParts[1];
+        let zip = addrParts[2].substring(3);
+        let imgs = [];
+        place.photos.forEach((photo) => {
+            imgs.push(photo.getUrl());
+        });
+        let verified = true;
+        submitSpot(name, category, price, addr, city, zip, imgs, verified, e);
+    }
+});
+
+manualEntry.addEventListener('submit', function(e) {
+    e.preventDefault();
+    let name = document.getElementById('spot-man-name').value;
+    let category = document.getElementById('spot-man-category').value;
+    let price = document.getElementById('spot-man-price').value;
+    let addr = document.getElementById('spot-man-addr').value;
+    let city = document.getElementById('spot-man-city').value;
+    let zip = document.getElementById('spot-man-zip').value;
+    let imgs = [document.getElementById('spot-man-img').value];
+    let verified = false;
+    submitSpot(name, category, price, addr, city, zip, imgs, verified, e);
+});
+
+function submitSpot(name, category, price, addr, city, zip, imgs, verified, e) {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            const userID = user.uid;
+            var spotsDB = db.collection("spots");
+            spotsDB.add({
+                name: name,
+                authorID: userID,
+                category: category,
+                price: price,
+                addr: addr,
+                city: city,
+                zip: zip,
+                imgs: imgs,
+                verified: verified
+                
+            }).then(function(res) {
+                e.target.reset();
+                if (e.target.id === 'spot-search-form') {
+                    resetSpotSearch();
+                }
+                spotSubmittedAlert();
+            });
+        }
+    });
+}
+
+function spotSubmittedAlert() {
+    var modal = new bootstrap.Modal(document.getElementById('spot-submitted-modal')); 
+    modal.toggle(); 
+}
+
+let goHome = document.getElementById('spot-submitted-go-home');
+goHome.addEventListener('click', function(e) {
+    window.location.assign("main.html");
+});
+
+
