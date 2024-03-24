@@ -3,6 +3,11 @@ let manualEntry = document.getElementById('manual-entry-form');
 let autocomplete;
 
 function initAutocomplete() {
+    //TODO: try init map here new map
+
+    const sw = { lat: 48.978508, lng: -123.397751};
+    const ne = { lat: 49.423439, lng: -122.653118};
+    const cornerBounds = new google.maps.LatLngBounds(sw, ne);
     autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('autocomplete'),
         {
@@ -10,6 +15,9 @@ function initAutocomplete() {
             componentRestrictions: { 'country': ['CA'] },
             fields: ['place_id', 'name', 'formatted_address', 'type', 'icon', 'price_level', 'photos'],
         });
+
+    autocomplete.setBounds(cornerBounds);
+    autocomplete.setOptions({ strictBounds: true });
 
     autocomplete.addListener('place_changed', onPlaceChanged);
 }
@@ -34,6 +42,7 @@ function onPlaceChanged() {
 }
 
 function loadCarousel(photos) {
+    document.getElementById('carousel-slide-entrance').innerHTML = "";
     photos.forEach((photo, i) => {
         if (i === 0) {
             var slide = `<div class="carousel-item active">
