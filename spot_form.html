@@ -49,8 +49,8 @@
             <input id="autocomplete" class="form-control" placeholder="Winona Park" type="text" required/>
             <div id="details"></div>
           </div>
-          <div class="col-md-6">
-            <p>Can't find the spot? Try entering the spot manually.</p>
+          <div class="col-md-6 align-self-end">
+            <p id="manual-suggestion-p">Can't find the spot? Try entering the spot manually.</p>
           </div>
           <div class="col-7">
             <label for="spot-auto-addr" class="form-label">Address</label>
@@ -128,6 +128,24 @@
             <button type="reset" class="btn btn-secondary">Reset</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="invalid-search-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Spot not found</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>The spot couldn't be found on Google Maps. Please enter the details in the Manual Entry tab.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="invalid-search-close">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="invalid-search-manual">Manual Entry</button>
+        </div>
       </div>
     </div>
   </div>

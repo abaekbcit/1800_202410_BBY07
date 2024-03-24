@@ -1,4 +1,7 @@
+let spotSearch = document.getElementById('spot-search-form');
+let manualEntry = document.getElementById('manual-entry-form');
 let autocomplete;
+
 function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('autocomplete'),
@@ -12,33 +15,23 @@ function initAutocomplete() {
 
     autocomplete.addListener('place_changed', onPlaceChanged);
 }
-/*
-function onPlaceChanged() {
-    var place = autocomplete.getPlace();
-
-    if (!place.geometry) {
-      //case for nonvalid place
-    } else {
-      document.getElementById('details').innerHTML = place.name;
-    }
-  }
-*/
 
 //TODO: case for when user enters an invalid place redirect to posting manual
 function onPlaceChanged() {
     const place = autocomplete.getPlace();
-    document.getElementById('spot-auto-addr').value = place.formatted_address;
-    let name = place.types[0];
-    document.getElementById('spot-auto-category').value = name.charAt(0).toUpperCase() + name.substring(1);
-    document.getElementById('spot-icon').src = place.icon;
-    loadCarousel(place.photos);
+    if (place.place_id) {
+        document.getElementById('spot-auto-addr').value = place.formatted_address;
+        let name = place.types[0];
+        document.getElementById('spot-auto-category').value = name.charAt(0).toUpperCase() + name.substring(1);
+        document.getElementById('spot-icon').src = place.icon;
+        loadCarousel(place.photos);
 
-    //console.log(place.photos[0].getUrl());
-    if (!place.price_level) {
-        document.getElementById('spot-auto-price').innerHTML = "";
-    } else {
-        // TODO: Make price look pretty
-        document.getElementById('spot-auto-price').innerHTML = "$".repeat(place.price_level);
+        if (!place.price_level) {
+            document.getElementById('spot-auto-price').innerHTML = "";
+        } else {
+            // TODO: Make price look pretty
+            document.getElementById('spot-auto-price').innerHTML = "$".repeat(place.price_level);
+        }
     }
 }
 
@@ -57,11 +50,7 @@ function loadCarousel(photos) {
     });
 }
 
-//TODO: should only be able submit on login
-
 function tabSelection(event, tab) {
-    let manualEntry = document.getElementById('manual-entry-form');
-    let spotSearch = document.getElementById('spot-search-form');
     //TODO: Maybe abstract things better
     switch(tab) {
         case 0:
@@ -77,3 +66,24 @@ function tabSelection(event, tab) {
     }
     event.currentTarget.className = "nav-link active spot-tab";
 }
+
+spotSearch.addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitSpotSearch();
+});
+
+//TODO: should only be able submit on login
+function submitSpotSearch() {
+    if (!autocomplete.getPlace() || !autocomplete.getPlace().place_id) {
+        invalidSearchAlert();
+    }
+}
+
+function invalidSearchAlert() {
+    var modal = new bootstrap.Modal(document.getElementById('invalid-search-modal')); 
+    modal.toggle(); 
+}
+
+document.getElementById('invalid-search-manual').addEventListener('click', function(e) {
+    tabSelection({currentTarget: document.getElementById('manual-tab')}, 1);
+})
