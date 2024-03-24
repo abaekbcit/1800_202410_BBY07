@@ -2,85 +2,143 @@
 <html>
 
 <head>
-    <title>Post a review</title>
+  <title>Submit a date spot</title>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Bootstrap Library CSS CDN go here -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <!-- Boostrap Library JS CDN  go here -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+  </script>
 
-    <!-- Bootstrap Library CSS CDN go here -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <!-- Boostrap Library JS CDN  go here -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-        </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
-    <link href="styles/style.css" rel="stylesheet">
+  <link href="styles/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <!-- our own navbar goes here -->
-    <nav id="navbarPlaceholder"></nav>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg" id="spot-form">
-                <form class="row g-3">
-                    <div class="col-md-6">
-                        <label for="input-spot-spot" class="form-label">Date Spot</label>
-                        <input type="text" class="form-control" required id="input-spot-spot">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="input-spot-category" class="form-label">Category</label>
-                        <select id="input-spot-category" class="form-select" required>
-                            <option selected value="">Choose...</option>
-                            <option>Dining</option>
-                            <option>Entertainment</option>
-                            <option>Active</option>
-                            <option>Scenery</option>
-                        </select>
-                    </div>
-                    <div class="col-12">
-                        <label for="input-spot-addr" class="form-label">Address</label>
-                        <input type="text" class="form-control" required id="input-spot-addr" placeholder="1234 Main St">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="input-spot-city" class="form-label">City</label>
-                        <input type="text" class="form-control" required id="input-spot-city">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="input-spot-province" class="form-label">Province</label>
-                        <select id="input-spot-province" class="form-select" required>
-                            <option selected value="">Choose...</option>
-                            <option>Alberta</option>
-                            <option>British Columbia</option>
-                            <option>Manitoba</option>
-                            <option>New Brunswick</option>
-                            <option>Newfoundland and Labrador</option>
-                            <option>Nova Scotia</option>
-                            <option>Ontario</option>
-                            <option>Prince Edward Island</option>
-                            <option>Quebec</option>
-                            <option>Saskatchewan</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="input-spot-zip" class="form-label">Zip</label>
-                        <input type="text" class="form-control" required id="input-spot-zip">
-                    </div>
-                    <div class="col-12">
-                        <label for="input-spot-img">Add a picture:</label>
-                        <input type="file" id="input-spot-img" name="input-spot-img" accept="image/png, image/jpeg" />
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-secondary" id="post-spot">Post</button>
-                    </div>
-                </form>
+  <!-- our own navbar goes here -->
+  <nav id="navbarPlaceholder"></nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg">
+
+        <ul class="nav nav-tabs" id="spot-form-tabs">
+          <li class="nav-item">
+            <a class="nav-link active spot-tab" id="search-tab" onclick="tabSelection(event, 0)">Spot Search</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link spot-tab" id="manual-tab" onclick="tabSelection(event, 1)">Manual Entry</a>
+          </li>
+        </ul>
+
+        <form class="row g-3" id="spot-search-form">
+          <div class="col-md-6">
+            <label for="autocomplete" class="form-label">Name</label>
+            <input id="autocomplete" class="form-control" placeholder="Winona Park" type="text" required/>
+            <div id="details"></div>
+          </div>
+          <div class="col-md-6">
+            <p>Can't find the spot? Try entering the spot manually.</p>
+          </div>
+          <div class="col-7">
+            <label for="spot-auto-addr" class="form-label">Address</label>
+            <input type="text" class="form-control" required id="spot-auto-addr" disabled>
+          </div>
+          <div class="col-md-2">
+            <label for="spot-category" class="form-label">Category</label>
+            <input type="text" class="form-control" id="spot-auto-category" disabled />
+          </div>
+          <div class="col-1">
+            <img id="spot-icon" />
+          </div>
+          <div class="col-md-2">
+            <h4 id="spot-auto-price"></h4>
+          </div>
+          <div class="col-md-6">
+            <div id="spotCarousel" class="carousel slide">
+              <div class="carousel-inner" id="carousel-slide-entrance">
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#spotCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#spotCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
             </div>
-        </div>
+          </div>         
+          <div class="col-12">
+            <button type="submit" class="btn btn-secondary submit-spot">Submit</button>
+            <button type="reset" class="btn btn-secondary" id="reset-auto-spot">Reset</button>
+          </div>
+        </form>
+
+        <form class="row g-3" id="manual-entry-form" style="display: none;">
+          <div class="col-md-4">
+            <label for="spot-man-name" class="form-label">Date Spot</label>
+            <input type="text" class="form-control" required id="spot-man-name" placeholder="Winona Park">
+          </div>
+          <div class="col-md-3">
+            <label for="customRange3" class="form-label">Category</label>
+            <select class="form-select" required>
+              <option selected>Select</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="cafe">Cafe</option>
+              <option value="activity">Activity</option>
+              <option value="park">Park</option>
+              <option value="point_of_interest">Point of interest</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="customRange3" class="form-label">Price Range:</label>
+            <output class="mx-2">0/5</output>
+            <input type="range" class="form-range" value="0" min="0" max="5" step="1" id="spot-man-price" oninput="this.previousElementSibling.value = this.value + '/5'" required>
+          </div>
+          <div class="col-6">
+            <label for="spot-man-addr" class="form-label">Address</label>
+            <input type="text" class="form-control" required id="spot-man-addr" placeholder="1234 Main St">
+          </div>
+          <div class="col-md-3">
+            <label for="spot-man-city" class="form-label">City</label>
+            <input type="text" class="form-control" required id="spot-man-city" placeholder="Vancouver">
+          </div>
+          <div class="col-md-2">
+            <label for="spot-man-zip" class="form-label">Zip</label>
+            <input type="text" class="form-control" required id="spot-man-zip" placeholder="V5G 3H2">
+          </div>
+          <div class="col-12">
+            <label for="spot-man-img">Add a picture:</label>
+            <input type="file" id="spot-man-img" name="spot-man-img" accept="image/png, image/jpeg" />
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-secondary submit-spot">Submit</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+          </div>
+        </form>
+      </div>
     </div>
-    <!-- our own footer goes here-->
-    <nav id="footerPlaceholder"></nav>
-    <script src="./scripts/skeleton.js"></script>
+  </div>
+
+  <!-- our own footer goes here-->
+  <nav id="footerPlaceholder"></nav>
+  <script src="./scripts/firebaseAPI_BBY07.js"></script>
+  <script src="./scripts/skeleton.js"></script>
+  <script src="./scripts/googleAPI.js"></script>
+
+  <script src="./scripts/completeForm.js"></script>
 </body>
 
 </html>

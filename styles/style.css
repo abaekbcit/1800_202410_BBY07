@@ -37,8 +37,34 @@ img {
 }
 
 /* review_form.html, spot_form.html */
-#review-form, #spot-form {
+#review-form, #spot-search-form, #manual-entry-form {
   background-color: #ffffff;
-  margin-top: 3%;
   padding: 3%;
+}
+
+#review-form {
+  margin-top: 3%;
+}
+
+#spot-search-form, #manual-entry-form {
+  margin: 0%;
+}
+
+.carousel-item img {
+  max-height: 500px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+#spot-form-tabs {
+  margin-top: 3%;
+}
+
+.spot-tab {
+  color: black;
+  background-color: #e9e9e9;
+}
+
+.spot-tab.active {
+  background-color: #ffffff;
 }
