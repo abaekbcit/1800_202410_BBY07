@@ -46,6 +46,10 @@ img {
   margin-top: 3%;
 }
 
+.dropdown.bootstrap-select {
+  display: block;
+}
+
 #spot-search-form, #manual-entry-form {
   margin: 0%;
 }
