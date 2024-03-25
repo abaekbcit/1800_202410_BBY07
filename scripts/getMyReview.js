@@ -1,11 +1,12 @@
 function displayMyReviewsDynamically() {
     let cardTemplate = document.getElementById("reviewCardTemplate"); // Retrieve the HTML element with the ID "hikeCardTemplate" and store it in the cardTemplate variable. 
 
+    //get the user id
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             const userID = user.uid;
 
-            console.log(user);
+            //select those reviews where the key "authorID" is equal to current user's userID
             db.collection("reviews")
             .where("authorID", "==", userID)
             .get()
