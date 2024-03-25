@@ -31,22 +31,30 @@
 </head>
 
 <body>
-    <div>
-        <nav class="topnav"><a class="active" href="#home">Home</a>
-            <a href="#about">Dining</a>
-            <a href="my_review_list.html">Reviews</a>
-            <a href="#">Favourites</a>
-            <a href="#">Settings</a>
-            <a href="#">Log Out</a>
-            <div class="search-container">
-                <form action="/action_page.php">
-                    <input type="text" placeholder="Search.." name="search">
-                    <button type="submit"><i class="fa fa-search"></i></button>
-                </form>
-        </nav>
-        <a href="#"><div id="rec">Insta Rec</div></a>
-        <a href="#"><div id="plan">Let's Plan It</div></a>
+
+    <nav id="navbarPlaceholder"></nav>
+
+    <div id="instaRec">
+        <a href="#">
+            <div id="rec">Insta Rec</div>
+        </a>
     </div>
+
+    <div id="planIt">
+        <a href="#">
+            <div id="plan">Let's Plan It</div>
+        </a>
+    </div>
+
+    <nav id="footerPlaceholder"></nav>
+
+
+
+
+    <script src="./scripts/firebaseAPI_BBY07.js"></script>
+    <script src="./scripts/skeleton.js"></script>
+    <script src="./scripts/script.js"></script>
+    <script src="./scripts/authentication.js"></script>
 
 </body>
 

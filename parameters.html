@@ -44,26 +44,26 @@
 
     <div class="slidecontainer">
         <label for="customRange3" class="form-label">How far are you willing to go?</label>
-        <output class="mx-2">0/100 km</output>
-        <input type="range" class="form-range" value="0" min="0" max="100" step="1" id="input-rv-spot-rating" oninput='this.previousElementSibling.value = this.value + "/100 km"'>
+        <output id="s">0/100 km</output>
+        <input type="range" class="form-range" value="0" min="0" max="100" step="1" id="input-parameters" oninput='this.previousElementSibling.value = this.value + "/100 km"'>
     </div>
     <div class="slidecontainer">
         <label for="customRange3" class="form-label">How pricey do you want them to be?</label>
-            <output class="mx-2">0/10</output>
-            <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="input-rv-spot-rating" oninput='this.previousElementSibling.value = this.value + "/10"'>
+            <output id="s">0/10</output>
+            <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="input-parameters" oninput='this.previousElementSibling.value = this.value + "/10"'>
     </div>
     <div class="slidecontainer">
         <label for="customRange3" class="form-label">How accurate do you want the suggestions to be? (The more accurate the less suggestions.)</label>
-        <output class="mx-2">0/10</output>
-        <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="input-rv-spot-rating" oninput='this.previousElementSibling.value = this.value + "/10"'>
+        <output id="s">0/10</output>
+        <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="input-parameters" oninput='this.previousElementSibling.value = this.value + "/10"'>
     </div>
     <div class="slidecontainer">
         <label for="customRange3" class="form-label">How many reviews are required?</label>
-        <output class="mx-2">0/10000</output>
-        <input type="range" class="form-range" value="0" min="0" max="10000" step="100" id="input-rv-spot-rating" oninput='this.previousElementSibling.value = this.value + "/10000"'>
+        <output id="sliderValue">0/10000</output>
+        <input type="range" class="form-range" value="0" min="0" max="10000" step="100" id="input-parameters" oninput='this.previousElementSibling.value = this.value + "/10000"'>
     </div>
     <button onClick="window.location.reload();" class="button">No</button>
-    <input type="button" class="button2" value="Yes">
+    <button onclick="saves()" class="button2">Yes</button>
 
 
 
@@ -73,6 +73,7 @@
     <script src="./scripts/firebaseAPI_BBY07.js"></script>
     <script src="./scripts/skeleton.js"></script>
     <script src="./scripts/script.js"></script>
+    <script src="scripts/parameters.js"></script>
     
 
 </body>
