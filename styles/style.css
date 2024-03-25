@@ -76,3 +76,8 @@ img {
 #manual-suggestion-p {
   margin-left: 10%;
 }
+
+.card-verified {
+  width: 10%;
+  margin-left: 2%;
+}

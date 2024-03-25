@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title id="page-title">Reviews</title>
+  <title id="page-title">Date Spots</title>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,18 +43,18 @@
 
   <!-- Templates for general use, not displayed -->
   <template id="reviewCardTemplate">
-    <div class="card py-2 my-2 mx-2" style="width: 20rem">
+    <div class="card py-2 my-2 mx-2 container" style="width: 20rem">
       <img class="card-image card-img-top" src="https://dummyimage.com/800x400/b3b3b3/000000&text=+"/>
       <div class="card-body">
         <h3 class="card-title">Card title</h3>
-        <h5 class="card-spot">placeholder</h5>
-        <p class="card-city">placeholder</p>
-        <hr />
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-        <a class="btn btn-primary card-href">Read more</a>
+        <hr/>
+        <div class="row"> 
+            <p class="card-city col-md-12 verified-entrance" style="display:inline-block;">placeholder</p>
+        </div> 
+        <div class="row">
+            <p class="card-cat-price">placeholder</p>
+        </div>
+        <a class="btn btn-primary card-href">Details</a>
       </div>
     </div>
   </template>
@@ -62,7 +62,10 @@
   <nav id="footerPlaceholder"></nav>
   <script src="./scripts/firebaseAPI_BBY07.js"></script>
   <script src="./scripts/skeleton.js"></script>
-  <script src="./scripts/getReview.js"></script>
+  <script src="./scripts/getSpot.js"></script>
+  <script>
+
+  </script>
 </body>
 
 </html>
