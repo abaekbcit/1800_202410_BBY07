@@ -33,3 +33,11 @@ function displayReviewInfo() {
         } );
 }
 displayReviewInfo();
+
+function favoriteReview() {
+
+
+
+
+    
+}
