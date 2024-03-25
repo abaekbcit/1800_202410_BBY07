@@ -68,3 +68,7 @@ img {
 .spot-tab.active {
   background-color: #ffffff;
 }
+
+#manual-suggestion-p {
+  margin-left: 10%;
+}

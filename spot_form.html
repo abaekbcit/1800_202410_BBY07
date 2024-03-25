@@ -49,8 +49,8 @@
             <input id="autocomplete" class="form-control" placeholder="Winona Park" type="text" required />
             <div id="details"></div>
           </div>
-          <div class="col-md-6">
-            <p>Can't find the spot? Try entering the spot manually.</p>
+          <div class="col-md-6 align-self-end">
+            <p id="manual-suggestion-p">Can't find the spot? Try entering the spot manually.</p>
           </div>
           <div class="col-7">
             <label for="spot-auto-addr" class="form-label">Address</label>
@@ -60,14 +60,14 @@
             <label for="spot-category" class="form-label">Category</label>
             <input type="text" class="form-control" id="spot-auto-category" disabled />
           </div>
-          <div class="col-1">
+          <div class="col-1 align-self-center">
             <img id="spot-icon" />
           </div>
-          <div class="col-md-2">
+          <div class="col-md-2 align-self-end">
             <h4 id="spot-auto-price"></h4>
           </div>
           <div class="col-md-6">
-            <div id="spotCarousel" class="carousel slide">
+            <div id="spotCarousel" class="carousel slide carousel-fade">
               <div class="carousel-inner" id="carousel-slide-entrance">
               </div>
               <button class="carousel-control-prev" type="button" data-bs-target="#spotCarousel" data-bs-slide="prev">
@@ -93,8 +93,8 @@
           </div>
           <div class="col-md-3">
             <label for="customRange3" class="form-label">Category</label>
-            <select class="form-select" required>
-              <option selected>Select</option>
+            <select class="form-select" required id="spot-man-category">
+              <option selected value="">Select</option>
               <option value="restaurant">Restaurant</option>
               <option value="cafe">Cafe</option>
               <option value="activity">Activity</option>
@@ -133,13 +133,50 @@
     </div>
   </div>
 
+  <div id="invalid-search-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Spot not found</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>The spot couldn't be found on Google Maps. Please enter the details in the Manual Entry tab.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="invalid-search-close">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="invalid-search-manual">Manual Entry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!--TODO: Maybe change to view spot instead of close-->
+    <div id="spot-submitted-modal" class="modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Spot submission</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Spot successfully submitted.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="spot-submitted-close">Close</button>
+            <button type="button" class="btn btn-primary" id="spot-submitted-go-home">Home</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <!-- our own footer goes here-->
   <nav id="footerPlaceholder"></nav>
   <script src="./scripts/firebaseAPI_BBY07.js"></script>
   <script src="./scripts/skeleton.js"></script>
   <script src="./scripts/googleAPI.js"></script>
 
-  <script src="./scripts/completeForm.js"></script>
+  <script src="./scripts/spotForm.js"></script>
 </body>
 
 </html>
