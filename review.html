@@ -26,6 +26,11 @@
     <!-- Bootstrap icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
+    <!-------------------------------------------->
+    <!-- Other libraries and styles of your own -->
+    <!-------------------------------------------->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link href="styles/style.css" rel="stylesheet">
 </head>
 
@@ -47,12 +52,15 @@
                         </div>
                     </div>
                     <div id="review-body">
-                        <h2 id="review-title">Review Title</h2>
+                        <h2 id="review-title">Review Title
+                        </h2>
+
                         <div class="container">
                             <div class="row">
                                 <h5 class="col-2" id="review-author">Author</h5>
                                 <time class="col-8" id="review-date">Date</time>
                                 <div class="col-2 row">
+                                    <span class="material-icons star" id="star1" onclick="favoriteReview()">star_outline</span>
                                     <p id="review-rating" class="col-8">Rating</p>
                                     <button class="review-rating-btn col-4" id="review-up"><i
                                             class="bi bi-hand-thumbs-up-fill"></i></button>
@@ -82,7 +90,6 @@
     <script src="./scripts/firebaseAPI_BBY07.js"></script>
     <script src="./scripts/skeleton.js"></script>
     <script src="./scripts/review.js"></script>
-    <script src="./scripts/favorite.js"></script>
 
 
 </body>
