@@ -1,7 +1,6 @@
 function displayReviewInfo() {
     let params = new URL(window.location.href); //get URL of search bar
     let ID = params.searchParams.get("docID"); //get value for key "id"
-
     // doublecheck: is your collection called "Reviews" or "reviews"?
     db.collection("reviews")
         .doc(ID)

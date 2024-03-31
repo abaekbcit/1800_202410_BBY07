@@ -13,7 +13,7 @@ function loadSpotCarousel(imgs) {
     });
 }
 
-function displayReviewInfo() {
+function displaySpotInfo() {
     let params = new URL(window.location.href); //get URL of search bar
     let ID = params.searchParams.get("docID"); //get value for key "id"
 
@@ -61,46 +61,8 @@ function displayReviewInfo() {
                 document.getElementById('spot-name')
                     .insertAdjacentHTML("beforeend", '<img src="images/google-maps.png" class="card-verified" data-toggle="tooltip" data-placement="right" title="Spot verified on Google Maps"/>');
             }
+            document.getElementById('spot-write-review').href = "review_form.html?docID=" + doc.id;
         });
 }
-displayReviewInfo();
 
-
-
-
-
-
-
-function favoriteReview() {
-    let params = new URL(window.location.href); //get URL of search bar
-    let reviewID = params.searchParams.get("docID"); //get value for key "id"
-    let star = document.getElementById('star1');
-
-    firebase.auth().onAuthStateChanged(function (user) {
-        const userID = user.uid;
-
-        console.log("Clicked");
-        if (star.textContent === 'star_outline') {
-            console.log("clicked");
-            star.textContent = 'star';
-            
-            db.collection("users").doc(userID).add({
-                favorites: reviewID,
-            })
-
-
-    } else {
-            star.textContent = 'star_outline';
-        }
-
-
-    });
-
-
-
-
-
-
-
-
-}
+displaySpotInfo();

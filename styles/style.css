@@ -46,6 +46,10 @@ img {
   margin-top: 3%;
 }
 
+#back-to-review {
+  cursor: pointer;
+}
+
 .dropdown.bootstrap-select {
   display: block;
 }
