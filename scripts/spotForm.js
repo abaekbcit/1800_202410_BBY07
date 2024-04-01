@@ -22,22 +22,22 @@ function initAutocomplete() {
 }
 
 async function initMap(lat, lng, name) {
-  const position = { lat: lat, lng: lng };
-  // Request needed libraries.
-  const { Map } = await google.maps.importLibrary("maps");
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    const position = { lat: lat, lng: lng };
+    // Request needed libraries.
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-  let map = new Map(document.getElementById("map"), {
-    zoom: 14,
-    center: position,
-    mapId: "SPOT_MAP_ID",
-  });
+    let map = new Map(document.getElementById("map"), {
+        zoom: 14,
+        center: position,
+        mapId: "SPOT_MAP_ID",
+    });
 
-  const marker = new AdvancedMarkerElement({
-    map: map,
-    position: position,
-    title: name,
-  });
+    const marker = new AdvancedMarkerElement({
+        map: map,
+        position: position,
+        title: name,
+    });
 }
 
 function onPlaceChanged() {
@@ -131,7 +131,7 @@ spotSearch.addEventListener('submit', function(e) {
             imgs.push(photo.getUrl());
         });
         let verified = true;
-        submitSpot(name, category, price, addr, city, zip, imgs, verified, e);
+        submitSpot(name, category, price.toString(), addr, city, zip, imgs, verified, e);
     }
 });
 

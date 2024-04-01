@@ -39,3 +39,7 @@ a:hover {
 a:active {
     text-decoration: none;
 }
+
+.param-form {
+    background-color: white;
+}
