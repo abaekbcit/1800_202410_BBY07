@@ -1,4 +1,5 @@
 function displayAllReviews() {
+    console.log("called");
     db.collection("reviews").get()
         .then(allReviews=> {
             allReviews.forEach(doc => {

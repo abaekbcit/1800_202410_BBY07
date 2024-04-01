@@ -34,27 +34,126 @@
 
     <nav id="navbarPlaceholder"></nav>
 
-    <div id="instaRec">
-        <a href="#">
-            <div id="rec">Insta Rec</div>
-        </a>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg">
+                <form class="row g-3" id="spot-params-form">
+                    <div class="col-md-6">
+                        <label for="spot-params-dist" class="form-label">Distance:</label>
+                        <output class="mx-2">1km</output>
+                        <input type="range" class="form-range" value="1" min="1" max="100" step="1" id="spot-params-dist"
+                          oninput="this.previousElementSibling.value = this.value + 'km'" required>
+                      </div>
+                    <div class="col-md-3">
+                        <label for="spot-params-verified" class="form-label">Status</label>
+                        <select class="form-select" required id="spot-params-verified">
+                          <option selected value="">Select</option>
+                          <option value="true">Verified only</option>
+                          <option value="false">Unverified only</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="spot-params-rating" class="form-label">Rating:</label>
+                      <output class="mx-2">0 and above</output>
+                      <input type="range" class="form-range" value="0" min="0" max="5" step="0.5" id="spot-params-rating"
+                        oninput="this.previousElementSibling.value = this.value + ' and above'" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="spot-params-price" class="form-label">Price Range:</label>
+                        <output class="mx-2">0/4</output>
+                        <input type="range" class="form-range" value="0" min="0" max="4" step="1" id="spot-params-price"
+                          oninput="this.previousElementSibling.value = this.value + '/4'" required>
+                      </div>
+                    <div class="col-4">
+                      <button type="reset" class="btn btn-secondary">Reset</button>
+                    </div>
+                  </form>
+                <!--
+                <div class="row g-3" id="spot-params">
+                    <div class="col">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button">
+                            Distance
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button style="position: absolute;" class="btn btn-outline-secondary dropdown-toggle" type="button" id="param-verified">
+                            Verified
+                        </button>
+                        <div class="container param-form-container" style="z-index: 2; position: absolute;">
+                            <div class="row">
+                                <form class="param-form">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="verifiedRadios" id="verifiedRadio" value="verified" checked>
+                                        <label class="form-check-label" for="verifiedRadio">
+                                            Verified only
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="verifiedRadios" id="unverifiedRadio" value="Unverified">
+                                        <label class="form-check-label" for="unverifiedRadio">
+                                            Unverified only
+                                        </label>
+                                    </div>
+                                    <button type="reset" class="btn btn-secondary" id="reset-auto-spot">Reset</button>
+                                    <button type="submit" class="btn btn-secondary submit-spot">Apply</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-secondary dropdown-toggle col" type="button">
+                        Price
+                    </button>
+                    <button class="btn btn-outline-secondary dropdown-toggle col" type="button">
+                        Rating
+                    </button>
+                    <button class="btn btn-outline-secondary dropdown-toggle col" type="button">
+                        Sort
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                </div>
+                -->
+            </div>
+        </div>
     </div>
 
-    <div id="planIt">
-        <a href="#">
-            <div id="plan">Let's Plan It</div>
-        </a>
-    </div>
+
+
+    <div class="container"> 
+        <!-- Here is the container for cards  -->
+        <div class="container" id="reviews-container">
+          <div id="reviews-holder" class="row row-cols-auto">
+          </div>
+        </div>
+      </div>
+    
+      <!-- Templates for general use, not displayed -->
+      <template id="reviewCardTemplate">
+        <div class="card py-2 my-2 mx-2 container" style="width: 20rem">
+          <img class="card-image card-img-top" src="https://dummyimage.com/800x400/b3b3b3/000000&text=+"/>
+          <div class="card-body">
+            <h3 class="card-title">Card title</h3>
+            <hr/>
+            <div class="row"> 
+                <p class="card-city col-md-12 verified-entrance" style="display:inline-block;">placeholder</p>
+            </div> 
+            <div class="row">
+                <p class="card-cat-price">placeholder</p>
+            </div>
+            <a class="btn btn-primary card-href">Details</a>
+          </div>
+        </div>
+      </template>
 
     <nav id="footerPlaceholder"></nav>
-
-
-
 
     <script src="./scripts/firebaseAPI_BBY07.js"></script>
     <script src="./scripts/skeleton.js"></script>
     <script src="./scripts/script.js"></script>
-    <script src="./scripts/authentication.js"></script>
+    <script src="./scripts/getSpots.js"></script>
+    <script src="./scripts/spotParams.js"></script>
+    <script>
+        getSpotsByParams(null, null, null, null, null);
+    </script>
 
 </body>
 
