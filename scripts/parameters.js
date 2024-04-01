@@ -88,3 +88,11 @@ function outputParameters(){
     }
 }
 outputParameters();
+
+function myFunction() {
+    let text = "Confirm changes\nAre you sure these are your preferences?";
+    if (confirm(text) == true) {
+      saveUserInfo()
+    } 
+    document.getElementById("demo").innerHTML = text;
+  }

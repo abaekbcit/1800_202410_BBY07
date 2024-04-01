@@ -37,6 +37,13 @@
     padding-bottom: 100px;
   }
 
+  #buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+
   .button {
     background-color: #f96262;
     border: none;
@@ -48,6 +55,7 @@
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+    
   }
   
   .button2 {

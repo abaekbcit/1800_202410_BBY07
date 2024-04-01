@@ -45,26 +45,32 @@
     <div class="slidecontainer">
         <label for="customRange3" class="form-label">How far are you willing to go?</label>
         <output id="outputDistance">0/100 km</output>
-        <input type="range" class="form-range" value="0" min="0" max="100" step="1" id="inputDistance" oninput='this.previousElementSibling.value = this.value + "/100 km"'>
+        <input type="range" class="form-range" value="0" min="0" max="100" step="1" id="inputDistance"
+            oninput='this.previousElementSibling.value = this.value + "/100 km"'>
     </div>
     <div class="slidecontainer">
         <label for="customRange3" class="form-label">How pricey do you want them to be?</label>
-            <output id="outputPrice">0/10</output>
-            <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="inputPrice" oninput='this.previousElementSibling.value = this.value + "/10"'>
+        <output id="outputPrice">0/10</output>
+        <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="inputPrice"
+            oninput='this.previousElementSibling.value = this.value + "/10"'>
     </div>
     <div class="slidecontainer">
-        <label for="customRange3" class="form-label">How accurate do you want the suggestions to be? (The more accurate the less suggestions.)</label>
+        <label for="customRange3" class="form-label">How accurate do you want the suggestions to be? (The more accurate
+            the less suggestions.)</label>
         <output id="outputAccuracy">0/10</output>
-        <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="inputAccuracy" oninput='this.previousElementSibling.value = this.value + "/10"'>
+        <input type="range" class="form-range" value="0" min="0" max="10" step="1" id="inputAccuracy"
+            oninput='this.previousElementSibling.value = this.value + "/10"'>
     </div>
     <div class="slidecontainer">
         <label for="customRange3" class="form-label">How many reviews are required?</label>
         <output id="outputReview">0/10000</output>
-        <input type="range" class="form-range" value="0" min="0" max="10000" step="100" id="inputReview" oninput='this.previousElementSibling.value = this.value + "/10000"'>
+        <input type="range" class="form-range" value="0" min="0" max="10000" step="500" id="inputReview"
+            oninput='this.previousElementSibling.value = this.value + "/10000"'>
     </div>
-    <button onClick="window.location.reload();" class="button" pla>Reset</button>
-    <button onclick="saveUserInfo()" class="button2">Submit</button>
-
+    <div id="buttons">
+        <button onClick="window.location.reload();" class="button" pla>Reset</button>
+        <button onclick="myFunction()" class="button2">Submit</button>
+    </div>
 
 
     <!---------------------------------------------->
@@ -74,7 +80,7 @@
     <script src="./scripts/skeleton.js"></script>
     <script src="./scripts/script.js"></script>
     <script src="./scripts/parameters.js"></script>
-    
+
 
 </body>
 
