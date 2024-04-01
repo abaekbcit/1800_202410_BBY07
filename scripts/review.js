@@ -1,9 +1,17 @@
 var currentUser;
 
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        currentUser = db.collection("users").doc(user.uid); //global
+        console.log(currentUser);
+    }
+});
+
 function displayReviewInfo() {
     let params = new URL(window.location.href); //get URL of search bar
     let ID = params.searchParams.get("docID"); //get value for key "id"
-    currentUser = db.collection("users").doc(user.uid);
+   
+
     // doublecheck: is your collection called "Reviews" or "reviews"?
     db.collection("reviews")
         .doc(ID)
@@ -46,10 +54,9 @@ function favoriteReview() {
     let params = new URL(window.location.href); //get URL of search bar
     let reviewID = params.searchParams.get("docID"); //get value for key "id"
     let star = document.getElementById('star1');
-    console.log("Clicked");
 
     if (star.textContent === 'star_outline') {
-        console.log("clicked");
+        console.log("Clicked");
         star.textContent = 'star';//set the star button to filled
 
         //add the reviewID to user's favorites array
