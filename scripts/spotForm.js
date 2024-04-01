@@ -3,8 +3,7 @@ let manualEntry = document.getElementById('manual-entry-form');
 let autocomplete;
 
 function initAutocomplete() {
-    //TODO: try init map here new map
-
+    //Constraints to search range for better search results
     const sw = { lat: 48.978508, lng: -123.397751};
     const ne = { lat: 49.423439, lng: -122.653118};
     const cornerBounds = new google.maps.LatLngBounds(sw, ne);
@@ -13,7 +12,7 @@ function initAutocomplete() {
         {
             types: ['establishment'],
             componentRestrictions: { 'country': ['CA'] },
-            fields: ['place_id', 'name', 'formatted_address', 'type', 'icon', 'price_level', 'photos'],
+            fields: ['geometry.location', 'name', 'formatted_address', 'type', 'icon', 'price_level', 'photos'],
         });
 
     autocomplete.setBounds(cornerBounds);
@@ -22,15 +21,36 @@ function initAutocomplete() {
     autocomplete.addListener('place_changed', onPlaceChanged);
 }
 
+async function initMap(lat, lng, name) {
+  const position = { lat: lat, lng: lng };
+  // Request needed libraries.
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+  let map = new Map(document.getElementById("map"), {
+    zoom: 14,
+    center: position,
+    mapId: "SPOT_MAP_ID",
+  });
+
+  const marker = new AdvancedMarkerElement({
+    map: map,
+    position: position,
+    title: name,
+  });
+}
+
 function onPlaceChanged() {
     const place = autocomplete.getPlace();
-    if (place.place_id) {
+    let location = place.geometry.location;
+    if (location) {
         document.getElementById('autocomplete').value = place.name;
         document.getElementById('spot-auto-addr').value = place.formatted_address;
         let type = place.types[0];
         document.getElementById('spot-auto-category').value = type.charAt(0).toUpperCase() + type.substring(1);
         document.getElementById('spot-icon').src = place.icon;
         loadCarousel(place.photos);
+        initMap(location.lat(), location.lng(), place.name);
 
         if (!place.price_level) {
             document.getElementById('spot-auto-price').innerHTML = "";
@@ -90,11 +110,12 @@ spotSearch.addEventListener('reset', function(e) {
 function resetSpotSearch() {
     document.getElementById('spot-icon').src = "";
     document.getElementById('carousel-slide-entrance').innerHTML = "";
+    document.getElementById('map').innerHTML = "";
 }
 
 spotSearch.addEventListener('submit', function(e) {
     e.preventDefault();
-    if (!autocomplete.getPlace() || !autocomplete.getPlace().place_id) {
+    if (!autocomplete.getPlace() || !autocomplete.getPlace().geometry.location) {
         invalidSearchAlert();
     } else {
         let place = autocomplete.getPlace();
@@ -163,5 +184,3 @@ let goHome = document.getElementById('spot-submitted-go-home');
 goHome.addEventListener('click', function(e) {
     window.location.assign("main.html");
 });
-
-
