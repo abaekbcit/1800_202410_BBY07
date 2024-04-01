@@ -25,6 +25,7 @@ function addReview(title, spot, spotRating, text, img) {
                 author: user.displayName,
                 date: new Date().toLocaleDateString(),
                 spot: spot,
+                spotID: spotID,
                 spotRating: spotRating,
                 text: text,
                 img: img,
