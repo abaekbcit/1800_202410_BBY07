@@ -16,12 +16,13 @@ function displayReviewInfo() {
             var date = doc.data().date;
             var rating = doc.data().rating;
 
-            // only populate title, and image
+            document.title = title;
             document.getElementById("review-title").innerHTML = title;
-            document.getElementById("review-spot").innerHTML = spot;
+            let reviewSpot = document.getElementById("review-spot");
+            reviewSpot.innerHTML = spot;
+            reviewSpot.href = "spot.html?docID=" + doc.data().spotID;;
             document.getElementById("review-content").innerHTML = text;
-            document.getElementById("review-addr").innerHTML = addr + "," + city;
-            //TODO: need to displace user name instead of user ID
+            document.getElementById("review-addr").innerHTML = addr + ", " + city;
             document.getElementById("review-author").innerHTML = author;
             document.getElementById("review-date").innerHTML = date;
             document.getElementById("review-rating").innerHTML = rating;

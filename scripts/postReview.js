@@ -3,10 +3,12 @@ reviewForm.addEventListener('submit', function(e) {
     e.preventDefault();
     let title = document.getElementById('input-rv-title').value;
     let spot = document.getElementById('input-rv-spot').value;
+    let addr = document.getElementById('input-rv-addr').value;
+    let city = document.getElementById('input-rv-city').value;
     let spotRating = document.getElementById('input-rv-spot-rating').value;
     let text = document.getElementById('input-rv-textarea').value;
     let img = document.getElementById('input-rv-img').value;
-    addReview(title, spot, spotRating, text, img);
+    addReview(title, spot, addr, city, spotRating, text, img);
 });
 
 let reviewID;
@@ -14,7 +16,7 @@ let reviewID;
 let params = new URL(window.location.href);
 let spotID = params.searchParams.get("docID");
 
-function addReview(title, spot, spotRating, text, img) {
+function addReview(title, spot, addr, city, spotRating, text, img) {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             const userID = user.uid;
@@ -27,6 +29,8 @@ function addReview(title, spot, spotRating, text, img) {
                 spot: spot,
                 spotID: spotID,
                 spotRating: spotRating,
+                addr: addr,
+                city: city,
                 text: text,
                 img: img,
                 rating: 0
