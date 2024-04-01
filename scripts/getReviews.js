@@ -1,8 +1,8 @@
 function displayAllReviews() {
     db.collection("reviews").get()
-        .then(allReviews=> {
+        .then(allReviews => {
             allReviews.forEach(doc => {
-                fillTemplates(doc);     
+                fillTemplates(doc);
             });
         });
 }
@@ -24,15 +24,39 @@ function displayMyReviews() {
 
 function displayReviewsBySpot() {
     let params = new URL(window.location.href);
-    let spotID = params.searchParams.get("docID"); 
+    let spotID = params.searchParams.get("docID");
 
     db.collection("reviews").where("spotID", "==", spotID).get()
-        .then(allReviews=> {
+        .then(allReviews => {
             allReviews.forEach(doc => {
                 fillTemplates(doc);
             });
         });
 }
+
+function displayMyFavoriteReviews() {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            const userID = user.uid;
+
+            //select the current user doc
+            db.collection("users").doc(userID).get()
+                .then(user => {
+                    console.log(user.data().favorites);
+                    //select the favorites array of the current user
+                    user.data().favorites.forEach(reviewID => {
+                        console.log(reviewID);
+                        //for each review id stored in the favorite array, get the review doc
+                        db.collection("reviews").doc(reviewID).get()
+                            .then(doc => {
+                                fillTemplates(doc);
+                            })
+                    });
+                });
+        }
+    });
+}
+
 
 function fillTemplates(doc) {
     let cardTemplate = document.getElementById("reviewCardTemplate");
@@ -49,7 +73,7 @@ function fillTemplates(doc) {
     newcard.querySelector('.card-image').innerHTML = img;
     newcard.querySelector('.card-spot').innerHTML = spot;
     newcard.querySelector('.card-city').innerHTML = city;
-    newcard.querySelector('a').href = "review.html?docID="+docID;
+    newcard.querySelector('a').href = "review.html?docID=" + docID;
 
     if (text.length > 20) {
         text = text.substring(0, 50) + "...";
