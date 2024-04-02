@@ -72,6 +72,7 @@ function fillTemplates(doc) {
                 var city = doc.data().city;
                 var priceRange = doc.data().price;
                 var verified = doc.data().verified;
+                var ratings = doc.data().ratings;
                 var docID = doc.id;
                 let newcard = cardTemplate.content.cloneNode(true);
                 newcard.querySelector('.card-title').innerHTML = name;
@@ -90,6 +91,12 @@ function fillTemplates(doc) {
                     newcard.querySelector('.verified-entrance')
                         .insertAdjacentHTML("beforeend", '<img src="images/google-maps.png" class="card-verified" data-toggle="tooltip" data-placement="right" title="Spot verified on Google Maps"/>');
                 }
+                if (ratings) {
+                    var avgRating = (ratings.ratingsTotal / ratings.ratingsCount).toFixed(1);
+                } else {
+                    var avgRating = "Unrated";
+                }
+                newcard.querySelector('.card-rating').innerHTML = avgRating;
                 newcard.querySelector('a').href = "spot.html?docID="+docID;
                 document.getElementById('reviews-holder').appendChild(newcard);
 }
