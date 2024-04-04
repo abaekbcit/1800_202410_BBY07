@@ -30,7 +30,7 @@ function displaySpotInfo() {
             var zip = doc.data().zip;
             var imgs = doc.data().imgs;
             var verified = doc.data().verified;
-            var ratings = doc.data().ratings;
+            var ratingsAvg = doc.data().ratingsAvg;
             document.title = name;
             document.getElementById("spot-name").innerHTML = name;
             document.getElementById("spot-category").innerHTML = category;
@@ -61,8 +61,8 @@ function displaySpotInfo() {
                 document.getElementById('spot-name')
                     .insertAdjacentHTML("beforeend", '<img src="images/google-maps.png" class="card-verified" data-toggle="tooltip" data-placement="right" title="Spot verified on Google Maps"/>');
             }
-            if (ratings) {
-                var avgRating = (ratings.ratingsTotal / ratings.ratingsCount).toFixed(1);
+            if (ratingsAvg) {
+                var avgRating = (ratingsAvg).toFixed(1);
             } else {
                 var avgRating = "Unrated";
             }

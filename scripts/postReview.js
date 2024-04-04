@@ -40,15 +40,20 @@ function addReview(title, spot, addr, city, spotRating, text, img) {
                 reviewPostedAlert();
             });
             db.collection("spots").doc(spotID).get().then(doc => {
-                let ratings = doc.get('ratings');
-                if (ratings) {
-                    let newTotal = ratings.ratingsTotal + parseInt(spotRating);
-                    var newRatings = {ratingsTotal: newTotal, ratingsCount: ++ratings.ratingsCount };
+                let ratingsAvg = doc.get('ratingsAvg');
+                let ratingsCount = doc.get('ratingsCount');
+                let newCount;
+                let newAvg;
+                if (ratingsAvg) {
+                    newCount = ratingsCount + 1;
+                    newAvg = (ratingsAvg * ratingsCount + parseInt(spotRating)) / newCount;
                 } else {
-                    var newRatings = {ratingsTotal: parseInt(spotRating), ratingsCount: 1 };
+                    newCount = 1;
+                    newAvg = parseInt(spotRating);
                 }
                 db.collection("spots").doc(spotID).update({
-                    "ratings": newRatings
+                    "ratingsAvg": newAvg,
+                    "ratingsCount": newCount
                 });
             });
         }

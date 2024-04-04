@@ -43,3 +43,15 @@ a:active {
 .param-form {
     background-color: white;
 }
+
+#spot-params {
+    overflow: auto;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+.inner {
+    display: inline-block;
+    margin: 1%
+}

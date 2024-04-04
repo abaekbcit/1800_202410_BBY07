@@ -131,7 +131,7 @@ spotSearch.addEventListener('submit', function(e) {
             imgs.push(photo.getUrl());
         });
         let verified = true;
-        submitSpot(name, category, price.toString(), addr, city, zip, imgs, verified, e);
+        submitSpot(name, category, price, addr, city, zip, imgs, verified, e);
     }
 });
 
