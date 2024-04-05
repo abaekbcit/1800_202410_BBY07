@@ -1,3 +1,5 @@
+let lat;
+let lng;
 let distance;
 let verified;
 let selectedVerified;
@@ -6,14 +8,68 @@ let selectedPrice = [];
 let rating;
 let sort;
 let selectedSort;
+let autocompleteSearchAddr;
+
+function initAutocompletes() {
+    //Gives an option to use current location in the autocomplete bar
+	setTimeout(function(){
+        $(".pac-container").append(`<div id="areasearch" class="pac-item areasearch" onmousedown="useCurrentLocation()">
+                                        <span class="pac-icon pac-icon-areas">
+                                        </span><span class="pac-item-query">
+                                        <span class="pac-matched"></span>Current Location</span> 
+                                    </div>`);
+    }, 500);
+    //Constraints to search range to restrict search area to roughly Greater Vancouver area
+    const sw = { lat: 48.978508, lng: -123.397751};
+    const ne = { lat: 49.423439, lng: -122.653118};
+    const cornerBounds = new google.maps.LatLngBounds(sw, ne);
+
+    autocompleteSearchAddr = new google.maps.places.Autocomplete(
+        document.getElementById('autocomplete-search-addr'),
+        {
+            types: ['address'],
+            componentRestrictions: { 'country': ['CA'] },
+            fields: ['geometry.location', 'formatted_address'],
+        }
+    );
+    autocompleteSearchAddr.setBounds(cornerBounds);
+    autocompleteSearchAddr.setOptions({ strictBounds: true });
+    autocompleteSearchAddr.addListener('place_changed', onSearchAddrChanged);
+}
+
+function useCurrentLocation() {
+    console.log("current");
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+            document.getElementById('autocomplete-search-addr').value = "";
+            document.getElementById('autocomplete-search-addr').placeholder = "Using current location";
+            if (distance != null) {
+                onParamsChanged();
+            }
+        });
+    }  
+}
+
+function onSearchAddrChanged() {
+    const place = autocompleteSearchAddr.getPlace();
+    let location = place.geometry.location;
+    document.getElementById('autocomplete-search-addr').placeholder = "Search near";
+    if (location) {
+        lat = location.lat();
+        lng = location.lng();
+        if (distance != null) {
+            onParamsChanged();
+        }
+    }
+}
 
 function onParamsChanged() {
-    //clean vals here
-    //verified to boolean
     if (verified != null) {
         var verifiedBool = (verified === "verified");
     }
-    getSpotsByParams(distance, verifiedBool, price, rating, sort);
+    getSpotsByParams(lat, lng, distance, verifiedBool, price, rating, sort);
 }
 
 function toggleParamModal(param) {

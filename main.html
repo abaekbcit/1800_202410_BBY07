@@ -37,6 +37,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg">
+              <div class="row">
+                <input id="autocomplete-search-addr" class="form-control col" placeholder="Search near" type="text" required />
+              </div>
                 <div class=" my-2" id="spot-params">
                   <div class="inner">
                     <button class="btn btn-light dropdown-toggle " type="button" id="spot-params-distance">
@@ -110,7 +113,7 @@
             <div class="modal-body">
                 <div class="row mx-2">
                   <output class="mx-2" id="distance-range-desc">Up to 0km</output>
-                  <input type="range" class="form-range" value="0" min="0" max="100" step="1" id="distance-param-range"
+                  <input type="range" class="form-range" value="0" min="0" max="30" step="1" id="distance-param-range"
                     oninput="this.previousElementSibling.value = 'Up to ' + this.value + 'km'" required>
                 </div>
             </div>
@@ -214,6 +217,7 @@
     <nav id="footerPlaceholder"></nav>
 
     <script src="./scripts/firebaseAPI_BBY07.js"></script>
+    <script src="./scripts/googleAPI.js"></script>
     <script src="./scripts/skeleton.js"></script>
     <script src="./scripts/script.js"></script>
     <script src="./scripts/getSpots.js"></script>
