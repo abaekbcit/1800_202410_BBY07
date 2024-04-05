@@ -1,20 +1,298 @@
-document.getElementById('spot-params-dist').addEventListener("change", onParamsChanged);
-document.getElementById('spot-params-verified').addEventListener('change', onParamsChanged);
-document.getElementById('spot-params-rating').addEventListener('change', onParamsChanged);
-document.getElementById('spot-params-price').addEventListener('change', onParamsChanged);
+let distance;
+let verified;
+let selectedVerified;
+let price = [];
+let selectedPrice = [];
+let rating;
+let sort;
+let selectedSort;
 
 function onParamsChanged() {
-    let distance = document.getElementById('spot-params-dist').value;
-    let verifiedStr = document.getElementById('spot-params-verified').value;
-    let verified;
-    if (verifiedStr === "true") {
-        verified = true;
-    } else if (verifiedStr === "false") {
-        verified = false;
+    //clean vals here
+    //verified to boolean
+    if (verified != null) {
+        var verifiedBool = (verified === "verified");
     }
-    let price = document.getElementById('spot-params-price').value;
-    let rating = document.getElementById('spot-params-rating').value;
-    let sortBy;
-    console.log("changed");
-    getSpotsByParams(distance, verified, price, rating, sortBy);
+    getSpotsByParams(distance, verifiedBool, price, rating, sort);
 }
+
+function toggleParamModal(param) {
+    let modalToToggle = param + '-param-modal';
+    var modal = new bootstrap.Modal(document.getElementById(modalToToggle)); 
+    modal.toggle(); 
+}
+
+let off = "btn btn-light dropdown-toggle col";
+let on = "btn btn-dark dropdown-toggle col";
+
+function toggleparamButton(button, state) {
+    button.className = state;
+}
+
+function resetAllParams() {
+    resetDistance();
+    resetVerified();
+    resetPrice();
+    resetRating();
+    resetSort();
+    onParamsChanged();
+}
+
+document.getElementById('reset-params-button').addEventListener('click', () => {
+    resetAllParams();
+})
+
+function unselectAllButtons(buttons, param) {
+    let lightBtn = "btn btn-light col " + param + "-btn";
+    buttons.forEach((btn) => {
+        btn.className = lightBtn;
+    });
+}
+
+function persistSelectedButton(buttons, value) {
+    buttons.forEach((btn) => {
+        if(btn.value == value) {
+            btn.className = "btn btn-dark col price-btn";
+        }
+    });
+}
+
+function setRange(slider, val) {
+    slider.value = val;
+}
+
+//-------------------------- Functions related to distance param button --------------------------
+
+let distanceParamButton = document.getElementById('spot-params-distance');
+let distanceRange = document.getElementById('distance-param-range');
+
+distanceParamButton.addEventListener('click', () => {
+    toggleParamModal('distance');
+});
+
+function setDistanceRangeDesc() {
+    let distanceRangeDesc = document.getElementById('distance-range-desc');
+    let distInDesc = (distance != null) ? distance : 0;
+    distanceRangeDesc.innerHTML = `Up to ${distInDesc}km`;
+}
+
+function resetDistance() {
+    toggleparamButton(distanceParamButton, off);
+    distance = null;
+    setRange(distanceRange, 0);
+    setDistanceRangeDesc();
+}
+
+document.getElementById('distance-param-reset').addEventListener('click', () => {
+    resetDistance();
+    onParamsChanged();
+});
+
+document.getElementById('distance-param-apply').addEventListener('click', () => {
+    toggleparamButton(distanceParamButton, on);
+    distance = parseInt(distanceRange.value);
+    onParamsChanged();
+});
+
+document.getElementById('distance-param-close').addEventListener('click', () => {
+    if (distance == null) {
+        setRange(distanceRange, 0);
+        setDistanceRangeDesc();
+    } else {
+        setRange(distanceRange, distance);
+        setDistanceRangeDesc();
+    }
+});
+
+//-------------------------- Functions related to verified param button --------------------------
+
+let verifiedParamButton = document.getElementById('spot-params-verified');
+let verifiedButtons = document.querySelectorAll('.verified-btn');
+
+verifiedParamButton.addEventListener('click', () => {
+    toggleParamModal('verified');
+});
+
+function selectVerifiedButton(e) {
+    let darkBtn = "btn btn-dark col price-btn";
+    e.target.className = darkBtn;
+}
+
+verifiedButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        selectedVerified = e.target.value;
+        unselectAllButtons(verifiedButtons, "verified");
+        selectVerifiedButton(e);
+    });
+});
+
+function resetVerified() {
+    toggleparamButton(verifiedParamButton, off);
+    unselectAllButtons(verifiedButtons, "verified");
+    verified = null;
+    selectedVerified = null;
+}
+
+document.getElementById('verified-param-reset').addEventListener('click', () => {
+    resetVerified();
+    onParamsChanged();
+});
+
+document.getElementById('verified-param-apply').addEventListener('click', () => {
+    toggleparamButton(verifiedParamButton, on);
+    verified = selectedVerified;
+    onParamsChanged();
+});
+
+document.getElementById('verified-param-close').addEventListener('click', () => {
+    unselectAllButtons(verifiedButtons, "verified");
+    if (verified != null) {
+        persistSelectedButton(verifiedButtons, verified);
+    }
+});
+
+//-------------------------- Functions related to price param button --------------------------
+
+let priceParamButton = document.getElementById('spot-params-price');
+let priceButtons = document.querySelectorAll('.price-btn');
+
+priceParamButton.addEventListener('click', () => {
+    toggleParamModal('price');
+});
+
+function togglePriceButton(e) {
+    let unselected = "btn btn-light col price-btn"
+    let selected = "btn btn-dark col price-btn"
+    e.target.className = e.target.className ===  unselected ? selected : unselected;
+}
+
+priceButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        selectedPrice.push(parseInt(e.target.value));
+        togglePriceButton(e);
+    });
+});
+
+function resetPrice() {
+    toggleparamButton(priceParamButton, off);
+    unselectAllButtons(priceButtons, "price");
+    price = [];
+    selectedPrice = [];
+}
+
+function persistSelectedPrices() {
+    priceButtons.forEach((btn) => {
+        if (price.includes(parseInt(btn.value))) {
+            btn.className = "btn btn-dark col price-btn"
+        }
+    });
+}
+
+document.getElementById('price-param-reset').addEventListener('click', () => {
+    resetPrice();
+    onParamsChanged();
+});
+
+document.getElementById('price-param-apply').addEventListener('click', () => {
+    toggleparamButton(priceParamButton, on);
+    price = selectedPrice;
+    onParamsChanged();
+});
+
+document.getElementById('price-param-close').addEventListener('click', () => {
+    selectedPrice = [];
+    unselectAllButtons(priceButtons, "price");
+    if (price.length != 0) {
+        persistSelectedPrices();
+    }
+});
+
+//-------------------------- Functions related to rating param button --------------------------
+
+let ratingParamButton = document.getElementById('spot-params-rating');
+let ratingRange = document.getElementById('rating-param-range');
+
+ratingParamButton.addEventListener('click', () => {
+    toggleParamModal('rating');
+});
+
+function setRatingRangeDesc() {
+    let ratingRangeDesc = document.getElementById('rating-range-desc');
+    let ratingInDesc = (rating != null) ? rating : 0;
+    ratingRangeDesc.innerHTML = `${ratingInDesc} and above`;
+}
+
+function resetRating() {
+    toggleparamButton(ratingParamButton, off);
+    rating = null;
+    setRange(ratingRange, 0);
+    setRatingRangeDesc();
+}
+
+document.getElementById('rating-param-reset').addEventListener('click', () => {
+    resetRating();
+    onParamsChanged();
+});
+
+document.getElementById('rating-param-apply').addEventListener('click', () => {
+    toggleparamButton(ratingParamButton, on);
+    rating = parseInt(ratingRange.value);
+    onParamsChanged();
+});
+
+document.getElementById('rating-param-close').addEventListener('click', () => {
+    if (rating == null) {
+        setRange(ratingRange, 0);
+        setRatingRangeDesc();
+    } else {
+        setRange(ratingRange, rating)
+        setRatingRangeDesc();
+    }
+});
+
+//-------------------------- Functions related to sort param button --------------------------
+
+let sortParamButton = document.getElementById('spot-params-sort');
+let sortButtons = document.querySelectorAll('.sort-btn');
+
+sortParamButton.addEventListener('click', () => {
+    toggleParamModal('sort');
+});
+
+function selectSortButton(e) {
+    let darkBtn = "btn btn-dark col sort-btn";
+    e.target.className = darkBtn;
+}
+
+sortButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        selectedSort = e.target.value;
+        unselectAllButtons(sortButtons, "sort");
+        selectSortButton(e);
+    });
+});
+
+function resetSort() {
+    toggleparamButton(sortParamButton, off);
+    unselectAllButtons(sortButtons, "sort");
+    sort = null;
+    selectedSort = null;
+}
+
+document.getElementById('sort-param-reset').addEventListener('click', () => {
+    resetSort();
+    onParamsChanged();
+});
+
+document.getElementById('sort-param-apply').addEventListener('click', () => {
+    toggleparamButton(sortParamButton, on);
+    sort = selectedSort;
+    onParamsChanged();
+});
+
+document.getElementById('sort-param-close').addEventListener('click', () => {
+    unselectAllButtons(sortButtons, "sort");
+    if (sort != null) {
+        persistSelectedButton(sortButtons, "sort");
+    }
+});

@@ -1,7 +1,13 @@
-async function getSpotsByParams(distance, verified, price, rating, sortBy) {
+async function getSpotsByParams(distance, verified, price, rating, sort) {
     var spots = db.collection("spots");
 
-    let allSpots = await spots.get();
+    let allSpots;
+    if (sort != null) {
+        allSpots = await spots.orderBy(sort).get();
+    } else {
+        allSpots = await spots.get();
+    }
+
     let queriedIDSet = getIDSet(allSpots);
 
     //TODO Need to add distance (requires calculations and probably a separate function)
@@ -12,17 +18,20 @@ async function getSpotsByParams(distance, verified, price, rating, sortBy) {
         queriedIDSet = intersection(queriedIDSet, q2Set);
     }
 
-    if (price) {
-        let q3 = await spots.where("price", "<=", price).get();
+    if (price != null && price.length != 0) {
+        let q3 = await spots.where("price", "in", price).get();
         let q3Set = getIDSet(q3);
         queriedIDSet = intersection(queriedIDSet, q3Set);
     }
 
     if (rating != null) {
-        let q4 = await spots.where("rating", ">=", rating).get();
+        let q4 = await spots.where("ratingsAvg", ">=", rating).get();
         let q4Set = getIDSet(q4);
-        //queriedIDSet = intersection(queriedIDSet, q4Set);
+        queriedIDSet = intersection(queriedIDSet, q4Set);
     }
+
+
+
     resetTemplates();
     queriedIDSet.forEach(spotID => {
         spots.doc(spotID).get().then(doc => {
@@ -72,6 +81,7 @@ function fillTemplates(doc) {
                 var city = doc.data().city;
                 var priceRange = doc.data().price;
                 var verified = doc.data().verified;
+                var ratingsAvg = doc.data().ratingsAvg;
                 var docID = doc.id;
                 let newcard = cardTemplate.content.cloneNode(true);
                 newcard.querySelector('.card-title').innerHTML = name;
@@ -90,6 +100,12 @@ function fillTemplates(doc) {
                     newcard.querySelector('.verified-entrance')
                         .insertAdjacentHTML("beforeend", '<img src="images/google-maps.png" class="card-verified" data-toggle="tooltip" data-placement="right" title="Spot verified on Google Maps"/>');
                 }
+                if (ratingsAvg) {
+                    var avgRating = (ratingsAvg).toFixed(1);
+                } else {
+                    var avgRating = "Unrated";
+                }
+                newcard.querySelector('.card-rating').innerHTML = avgRating;
                 newcard.querySelector('a').href = "spot.html?docID="+docID;
                 document.getElementById('reviews-holder').appendChild(newcard);
 }

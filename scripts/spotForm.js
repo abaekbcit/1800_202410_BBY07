@@ -1,24 +1,38 @@
 let spotSearch = document.getElementById('spot-search-form');
 let manualEntry = document.getElementById('manual-entry-form');
-let autocomplete;
+let autocompletePlace;
+let autocompleteAddr;
 
-function initAutocomplete() {
+let spotID;
+
+function initAutocompletes() {
     //Constraints to search range for better search results
     const sw = { lat: 48.978508, lng: -123.397751};
     const ne = { lat: 49.423439, lng: -122.653118};
     const cornerBounds = new google.maps.LatLngBounds(sw, ne);
-    autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById('autocomplete'),
+    autocompletePlace = new google.maps.places.Autocomplete(
+        document.getElementById('autocomplete-place'),
         {
             types: ['establishment'],
             componentRestrictions: { 'country': ['CA'] },
             fields: ['geometry.location', 'name', 'formatted_address', 'type', 'icon', 'price_level', 'photos'],
-        });
+        }
+    );
+    autocompletePlace.setBounds(cornerBounds);
+    autocompletePlace.setOptions({ strictBounds: true });
+    autocompletePlace.addListener('place_changed', onPlaceChanged);
 
-    autocomplete.setBounds(cornerBounds);
-    autocomplete.setOptions({ strictBounds: true });
-
-    autocomplete.addListener('place_changed', onPlaceChanged);
+    autocompleteAddr = new google.maps.places.Autocomplete(
+        document.getElementById('autocomplete-addr'),
+        {
+            types: ['address'],
+            componentRestrictions: { 'country': ['CA'] },
+            fields: ['geometry.location', 'formatted_address'],
+        }
+    );
+    autocompleteAddr.setBounds(cornerBounds);
+    autocompleteAddr.setOptions({ strictBounds: true });
+    autocompleteAddr.addListener('place_changed', onAddrChanged);
 }
 
 async function initMap(lat, lng, name) {
@@ -41,10 +55,10 @@ async function initMap(lat, lng, name) {
 }
 
 function onPlaceChanged() {
-    const place = autocomplete.getPlace();
+    const place = autocompletePlace.getPlace();
     let location = place.geometry.location;
     if (location) {
-        document.getElementById('autocomplete').value = place.name;
+        document.getElementById('autocomplete-place').value = place.name;
         document.getElementById('spot-auto-addr').value = place.formatted_address;
         let type = place.types[0];
         document.getElementById('spot-auto-category').value = type.charAt(0).toUpperCase() + type.substring(1);
@@ -55,30 +69,41 @@ function onPlaceChanged() {
         if (!place.price_level) {
             document.getElementById('spot-auto-price').innerHTML = "";
         } else {
-            // TODO: Make price look pretty
             document.getElementById('spot-auto-price').innerHTML = "$".repeat(place.price_level);
         }
     }
 }
 
+function onAddrChanged() {
+    const place = autocompleteAddr.getPlace();
+    let addr = place.formatted_address;
+    if (addr) {
+        let addrComponents = addr.split(', ');
+        document.getElementById('autocomplete-addr').value = addrComponents[0];
+        document.getElementById('spot-man-city').value = addrComponents[1];
+        document.getElementById('spot-man-zip').value = addrComponents[2].substring(3);
+    }
+}
+
 function loadCarousel(photos) {
     document.getElementById('carousel-slide-entrance').innerHTML = "";
-    photos.forEach((photo, i) => {
-        if (i === 0) {
-            var slide = `<div class="carousel-item active">
-                            <img src=${photo.getUrl()} class="d-block w-100 carousel-img" alt="...">
-                        </div>`;
-        } else {
-            var slide = `<div class="carousel-item">
-                            <img src=${photo.getUrl()} class="d-block w-100 carousel-img" alt="...">
-                        </div>`;
-        }
-        document.getElementById('carousel-slide-entrance').insertAdjacentHTML("beforeend", slide);
-    });
+    if (photos) {
+        photos.forEach((photo, i) => {
+            if (i === 0) {
+                var slide = `<div class="carousel-item active">
+                                <img src=${photo.getUrl()} class="d-block w-100 carousel-img" alt="...">
+                            </div>`;
+            } else {
+                var slide = `<div class="carousel-item">
+                                <img src=${photo.getUrl()} class="d-block w-100 carousel-img" alt="...">
+                            </div>`;
+            }
+            document.getElementById('carousel-slide-entrance').insertAdjacentHTML("beforeend", slide);
+        });
+    }
 }
 
 function tabSelection(event, tab) {
-    //TODO: Maybe abstract things better
     switch(tab) {
         case 0:
             spotSearch.style.display = "flex";
@@ -94,8 +119,19 @@ function tabSelection(event, tab) {
     event.currentTarget.className = "nav-link active spot-tab";
 }
 
-function invalidSearchAlert() {
-    var modal = new bootstrap.Modal(document.getElementById('invalid-search-modal')); 
+function invalidAlert(source) {
+    let title;
+    let text;
+    if (source === "place") {
+        title = "Spot not found"
+        text = "The spot couldn't be found on Google Maps. Please enter the details in the Manual Entry tab.";
+    } else {
+        title = "Invalid address"
+        text = "Adress is invalid, please try entering again."
+    }
+    document.getElementById('invalid-modal-title').innerHTML = title;
+    document.getElementById('invalid-modal-text').innerHTML = text;
+    var modal = new bootstrap.Modal(document.getElementById('invalid-modal')); 
     modal.toggle(); 
 }
 
@@ -115,40 +151,57 @@ function resetSpotSearch() {
 
 spotSearch.addEventListener('submit', function(e) {
     e.preventDefault();
-    if (!autocomplete.getPlace() || !autocomplete.getPlace().geometry.location) {
-        invalidSearchAlert();
-    } else {
-        let place = autocomplete.getPlace();
+    let place = autocompletePlace.getPlace();
+    if (place) {
         let name = place.name;
+        if (name === document.getElementById('autocomplete-place').value) {
         let category = place.types[0];
         let price = (place.price_level)? place.price_level : 0;
         let addrParts = place.formatted_address.split(', ');
         let addr = addrParts[0];
         let city = addrParts[1];
         let zip = addrParts[2].substring(3);
+        let lat = place.geometry.location.lat();
+        let lng = place.geometry.location.lng();
         let imgs = [];
         place.photos.forEach((photo) => {
             imgs.push(photo.getUrl());
         });
         let verified = true;
-        submitSpot(name, category, price.toString(), addr, city, zip, imgs, verified, e);
+        submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, verified, e);
+        } else {
+            invalidAlert("place");
+        }
+    } else {
+        invalidAlert("place");
     }
 });
 
 manualEntry.addEventListener('submit', function(e) {
     e.preventDefault();
-    let name = document.getElementById('spot-man-name').value;
-    let category = document.getElementById('spot-man-category').value;
-    let price = document.getElementById('spot-man-price').value;
-    let addr = document.getElementById('spot-man-addr').value;
-    let city = document.getElementById('spot-man-city').value;
-    let zip = document.getElementById('spot-man-zip').value;
-    let imgs = [document.getElementById('spot-man-img').value];
-    let verified = false;
-    submitSpot(name, category, price, addr, city, zip, imgs, verified, e);
+    let autoAddr = autocompleteAddr.getPlace();
+    if (autoAddr) {
+        let addr = autoAddr.formatted_address.split(', ')[0];
+        if (addr === document.getElementById('autocomplete-addr').value) {
+            let name = document.getElementById('spot-man-name').value;
+            let category = document.getElementById('spot-man-category').value;
+            let price = document.getElementById('spot-man-price').value;
+            let city = document.getElementById('spot-man-city').value;
+            let zip = document.getElementById('spot-man-zip').value;
+            let lat = autoAddr.geometry.location.lat();
+            let lng = autoAddr.geometry.location.lng();
+            let imgs = [document.getElementById('spot-man-img').value];
+            let verified = false;
+            submitSpot(name, category, parseInt(price), addr, city, zip, lat, lng, imgs, verified, e);
+        } else {
+            invalidAlert("addr");
+        }
+    } else {
+        invalidAlert("addr");
+    }
 });
 
-function submitSpot(name, category, price, addr, city, zip, imgs, verified, e) {
+function submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, verified, e) {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             const userID = user.uid;
@@ -161,10 +214,13 @@ function submitSpot(name, category, price, addr, city, zip, imgs, verified, e) {
                 addr: addr,
                 city: city,
                 zip: zip,
+                lat: lat,
+                lng: lng,
                 imgs: imgs,
                 verified: verified
                 
             }).then(function(res) {
+                spotID = res.id;
                 e.target.reset();
                 if (e.target.id === 'spot-search-form') {
                     resetSpotSearch();
@@ -180,7 +236,7 @@ function spotSubmittedAlert() {
     modal.toggle(); 
 }
 
-let goHome = document.getElementById('spot-submitted-go-home');
-goHome.addEventListener('click', function(e) {
-    window.location.assign("main.html");
+let viewSpot = document.getElementById('spot-submitted-view-spot');
+viewSpot.addEventListener('click', function(e) {
+    window.location.assign("spot.html?docID=" + spotID);
 });

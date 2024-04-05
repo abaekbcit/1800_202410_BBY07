@@ -28,7 +28,7 @@ function addReview(title, spot, addr, city, spotRating, text, img) {
                 date: new Date().toLocaleDateString(),
                 spot: spot,
                 spotID: spotID,
-                spotRating: spotRating,
+                spotRating: parseInt(spotRating),
                 addr: addr,
                 city: city,
                 text: text,
@@ -38,6 +38,23 @@ function addReview(title, spot, addr, city, spotRating, text, img) {
                 reviewID = res.id;
                 reviewForm.reset();
                 reviewPostedAlert();
+            });
+            db.collection("spots").doc(spotID).get().then(doc => {
+                let ratingsAvg = doc.get('ratingsAvg');
+                let ratingsCount = doc.get('ratingsCount');
+                let newCount;
+                let newAvg;
+                if (ratingsAvg) {
+                    newCount = ratingsCount + 1;
+                    newAvg = (ratingsAvg * ratingsCount + parseInt(spotRating)) / newCount;
+                } else {
+                    newCount = 1;
+                    newAvg = parseInt(spotRating);
+                }
+                db.collection("spots").doc(spotID).update({
+                    "ratingsAvg": newAvg,
+                    "ratingsCount": newCount
+                });
             });
         }
     });

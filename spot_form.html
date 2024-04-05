@@ -45,8 +45,8 @@
 
         <form class="row g-3" id="spot-search-form">
           <div class="col-md-6">
-            <label for="autocomplete" class="form-label">Name</label>
-            <input id="autocomplete" class="form-control" placeholder="Winona Park" type="text" required />
+            <label for="autocomplete-place" class="form-label">Name</label>
+            <input id="autocomplete-place" class="form-control" placeholder="Winona Park" type="text" required />
             <div id="details"></div>
           </div>
           <div class="col-md-6 align-self-end">
@@ -111,8 +111,8 @@
               oninput="this.previousElementSibling.value = this.value + '/4'" required>
           </div>
           <div class="col-6">
-            <label for="spot-man-addr" class="form-label">Address</label>
-            <input type="text" class="form-control" required id="spot-man-addr" placeholder="1234 Main St">
+            <label for="autocomplete-addr" class="form-label">Address</label>
+            <input id="autocomplete-addr" class="form-control" placeholder="7575 Columbia St" type="text" required />
           </div>
           <div class="col-md-3">
             <label for="spot-man-city" class="form-label">City</label>
@@ -135,15 +135,15 @@
     </div>
   </div>
 
-  <div id="invalid-search-modal" class="modal" tabindex="-1">
+  <div id="invalid-modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Spot not found</h5>
+          <h5 class="modal-title" id="invalid-modal-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>The spot couldn't be found on Google Maps. Please enter the details in the Manual Entry tab.</p>
+          <p id="invalid-modal-text"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="invalid-search-close">Close</button>
@@ -166,7 +166,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="spot-submitted-close">Close</button>
-            <button type="button" class="btn btn-primary" id="spot-submitted-go-home">Home</button>
+            <button type="button" class="btn btn-primary" id="spot-submitted-view-spot">View Spot</button>
           </div>
         </div>
       </div>
