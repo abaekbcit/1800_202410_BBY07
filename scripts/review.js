@@ -29,12 +29,21 @@ function displayReviewInfo() {
 
             document.title = title;
             document.getElementById("review-title").innerHTML = title;
+            
             let reviewSpot = document.getElementById("review-spot");
             reviewSpot.innerHTML = spot;
             reviewSpot.href = "spot.html?docID=" + doc.data().spotID;;
+
+            let authorReview = document.getElementById("review-author");
+            authorReview.innerHTML = author;
+
+            // document.getElementById("review-author").innerHTML = author;
+
             document.getElementById("review-content").innerHTML = text;
             document.getElementById("review-addr").innerHTML = addr + ", " + city;
-            document.getElementById("review-author").innerHTML = author;
+
+
+            
             document.getElementById("review-date").innerHTML = date;
             document.getElementById("review-rating").innerHTML = rating;
 
