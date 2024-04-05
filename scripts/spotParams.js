@@ -8,6 +8,8 @@ let selectedPrice = [];
 let rating;
 let sort;
 let selectedSort;
+let sortOrder = "desc";
+let selectedSortOrder;
 let autocompleteSearchAddr;
 
 function initAutocompletes() {
@@ -38,7 +40,6 @@ function initAutocompletes() {
 }
 
 function useCurrentLocation() {
-    console.log("current");
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
             lat = position.coords.latitude;
@@ -65,11 +66,18 @@ function onSearchAddrChanged() {
     }
 }
 
+function resetSearchAddr() {
+    document.getElementById('autocomplete-search-addr').value = "";
+    lat = null;
+    lng = null;
+}
+
 function onParamsChanged() {
     if (verified != null) {
         var verifiedBool = (verified === "verified");
     }
-    getSpotsByParams(lat, lng, distance, verifiedBool, price, rating, sort);
+    let order = (sortOrder != null) ? sortOrder : "desc";
+    getSpotsByParams(lat, lng, distance, verifiedBool, price, rating, sort, order);
 }
 
 function toggleParamModal(param) {
@@ -86,6 +94,7 @@ function toggleparamButton(button, state) {
 }
 
 function resetAllParams() {
+    resetSearchAddr();
     resetDistance();
     resetVerified();
     resetPrice();
@@ -147,7 +156,10 @@ document.getElementById('distance-param-reset').addEventListener('click', () => 
 document.getElementById('distance-param-apply').addEventListener('click', () => {
     toggleparamButton(distanceParamButton, on);
     distance = parseInt(distanceRange.value);
-    onParamsChanged();
+    if (lat != null & lng != null) {
+        onParamsChanged();
+
+    }
 });
 
 document.getElementById('distance-param-close').addEventListener('click', () => {
@@ -310,6 +322,7 @@ document.getElementById('rating-param-close').addEventListener('click', () => {
 
 let sortParamButton = document.getElementById('spot-params-sort');
 let sortButtons = document.querySelectorAll('.sort-btn');
+let sortOrderButtons = document.querySelectorAll('.sort-order-btn');
 
 sortParamButton.addEventListener('click', () => {
     toggleParamModal('sort');
@@ -317,6 +330,12 @@ sortParamButton.addEventListener('click', () => {
 
 function selectSortButton(e) {
     let darkBtn = "btn btn-dark col sort-btn";
+    e.target.className = darkBtn;
+}
+
+//TODO: Consider abstracting with other select
+function selectSortOrderButton(e) {
+    let darkBtn = "btn btn-dark col sort-order-btn";
     e.target.className = darkBtn;
 }
 
@@ -328,11 +347,23 @@ sortButtons.forEach((btn) => {
     });
 });
 
+sortOrderButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        selectedSortOrder = e.target.value;
+        unselectAllButtons(sortOrderButtons, "sort-order");
+        selectSortOrderButton(e);
+    });
+});
+
 function resetSort() {
     toggleparamButton(sortParamButton, off);
     unselectAllButtons(sortButtons, "sort");
+    unselectAllButtons(sortOrderButtons, "sort-order");
+    document.getElementById("sort-order-desc").className = "btn btn-dark col sort-order-btn";
     sort = null;
     selectedSort = null;
+    sortOrder = "desc";
+    selectedSortOrder = null;
 }
 
 document.getElementById('sort-param-reset').addEventListener('click', () => {
@@ -343,6 +374,7 @@ document.getElementById('sort-param-reset').addEventListener('click', () => {
 document.getElementById('sort-param-apply').addEventListener('click', () => {
     toggleparamButton(sortParamButton, on);
     sort = selectedSort;
+    sortOrder = selectedSortOrder;
     onParamsChanged();
 });
 

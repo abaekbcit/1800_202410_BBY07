@@ -1,4 +1,5 @@
 //--------------------------------------------------------
+// Function taken from 1800 Tech Tips (202410)
 // Function takes 2 points (long and lat)
 // converts it to distance, and calculates the distance
 // (absolute value between the two points)
@@ -20,30 +21,31 @@ function deg2rad(deg) {
     return deg * (Math.PI / 180)
 }
 
-async function getSpotsByParams(lat, lng, distance, verified, price, rating, sort) {
+async function getSpotsByParams(lat, lng, distance, verified, price, rating, sort, sortOrder) {
     var spots = db.collection("spots");
 
     let allSpots;
     if (sort != null) {
-        allSpots = await spots.orderBy(sort).get();
+        if (sort === "distance") {
+            allSpots = null;
+        } else {
+            allSpots = await spots.orderBy(sort, sortOrder).get();
+        }
     } else {
         allSpots = await spots.get();
     }
 
     let queriedIDSet = getIDSet(allSpots);
 
-    //TODO Need to add distance (requires calculations and probably a separate function)
     if (distance != null && (lat != null && lng != null)) {
         let q1Set = new Set();
         await spots.get()
             .then(allSpots => {
                 allSpots.forEach(doc => {
                     if (getDistanceFromLatLonInKm(lat, lng, doc.data().lat, doc.data().lng) <= distance) {
-                        console.log("Yes");
                         q1Set.add(doc.id);
                     }
                 });
-                console.log(q1Set);
                 queriedIDSet = intersection(queriedIDSet, q1Set);
             });
     }
@@ -86,14 +88,8 @@ function getIDSet(docs) {
 
 function intersection(set1, set2) {
     let res = new Set();
-    let smallerSet = set1;
-    let largerSet = set2;
-    if (set1.size > set2.size) {
-        smallerSet = set2;
-        largerSet = set1;
-    }
-    smallerSet.forEach(id => {
-        if (largerSet.has(id)) {
+    set1.forEach(id => {
+        if (set2.has(id)) {
             res.add(id);
         }
     });

@@ -201,14 +201,24 @@
             </div>
             <div class="modal-body">
                 <div class="mx-2">
-                    <button type="button" class="btn btn-light col sort-btn" value="ratingsAvg">Rating</button>
-                    <button type="button" class="btn btn-light col sort-btn" value="distance">Distance</button>
-                    <button type="button" class="btn btn-light col sort-btn" value="price">Price</button>
+                    <div class="row">
+                      <button type="button" class="btn btn-light col sort-btn" value="ratingsAvg">Rating</button>
+                    </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-light col sort-btn" value="distance">Distance</button>
+                    </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-light col sort-btn" value="price">Price</button>
+                    </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-dark col sort-order-btn" value="desc" id="sort-order-desc">Descending</button>
+                      <button type="button" class="btn btn-light col sort-order-btn" value="asc" id="sort-order-asc">Ascending</button>        
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="sort-param-reset">Reset</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="sort-param-apply">Apply</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="sort-param-reset">Reset</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="sort-param-apply">Apply</button>  
             </div>
           </div>
         </div>
@@ -222,7 +232,6 @@
     <script src="./scripts/script.js"></script>
     <script src="./scripts/getSpots.js"></script>
     <script src="./scripts/spotParams.js"></script>
-    <script src="./scripts/getLocation.js"></script>
     <script>
         getSpotsByParams(null, null, null, null, null);
     </script>
