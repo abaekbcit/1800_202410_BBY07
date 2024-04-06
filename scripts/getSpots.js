@@ -21,6 +21,20 @@ function deg2rad(deg) {
     return deg * (Math.PI / 180)
 }
 
+function getDistances(lat, lng) {
+    return 0;
+}
+
+function sortByDistance(sortOrder) {
+    db.collection("spots").get()
+        .then(allSpots => {
+            allSpots.forEach(doc => {
+                getDistanceFromLatLonInKm(lat, lng, doc.data().lat, doc.data().lng);
+            });
+            queriedIDSet = intersection(queriedIDSet, q1Set);
+        });
+}
+
 async function getSpotsByParams(lat, lng, distance, verified, price, rating, sort, sortOrder) {
     var spots = db.collection("spots");
 

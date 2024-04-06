@@ -190,9 +190,9 @@ manualEntry.addEventListener('submit', function(e) {
             let zip = document.getElementById('spot-man-zip').value;
             let lat = autoAddr.geometry.location.lat();
             let lng = autoAddr.geometry.location.lng();
-            // let imgs = [document.getElementById('spot-man-img').value];
+            let imgs = "";
             let verified = false;
-            submitSpot(name, category, parseInt(price), addr, city, zip, lat, lng, verified, e);
+            submitSpot(name, category, parseInt(price), addr, city, zip, lat, lng, imgs, verified, e);
         } else {
             invalidAlert("addr");
         }
@@ -201,7 +201,7 @@ manualEntry.addEventListener('submit', function(e) {
     }
 });
 
-function submitSpot(name, category, price, addr, city, zip, lat, lng, verified, e) {
+function submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, verified, e) {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             const userID = user.uid;
@@ -216,7 +216,7 @@ function submitSpot(name, category, price, addr, city, zip, lat, lng, verified, 
                 zip: zip,
                 lat: lat,
                 lng: lng,
-                // imgs: imgs,
+                imgs: imgs,
                 verified: verified
                 
             }).then(function(res) {
@@ -224,10 +224,10 @@ function submitSpot(name, category, price, addr, city, zip, lat, lng, verified, 
                 e.target.reset();
                 if (e.target.id === 'spot-search-form') {
                     resetSpotSearch();
+                } else {
+                    uploadPic(spotID); //use the document id to call uploadPic function
                 }
                 spotSubmittedAlert();
-
-                uploadPic(spotID); //use the document id to call uploadPic function
 
             });
         }
@@ -274,12 +274,13 @@ function uploadPic(postDocID) {
                  // AFTER .getDownloadURL is done
                 .then(function (url) { // Get URL of the uploaded file
                     console.log("3. Got the download URL.");
-
+                    let img = [url];
+                    console.log("Inserting ", img);
                     // Now that the image is on Storage, we can go back to the
                     // post document, and update it with an "image" field
                     // that contains the url of where the picture is stored.
                     db.collection("spots").doc(postDocID).update({
-                            "image": url // Save the URL into users collection
+                            "imgs": img // Save the URL into users collection
                         })
                          // AFTER .update is done
                         .then(function () {
