@@ -21,47 +21,51 @@ function deg2rad(deg) {
     return deg * (Math.PI / 180)
 }
 
-function getDistances(lat, lng) {
-    return 0;
-}
-
-function sortByDistance(sortOrder) {
-    db.collection("spots").get()
+async function getDistances(lat, lng) {
+    let docsWithDistance = [];
+    await db.collection("spots").get()
         .then(allSpots => {
             allSpots.forEach(doc => {
-                getDistanceFromLatLonInKm(lat, lng, doc.data().lat, doc.data().lng);
+                let distance = getDistanceFromLatLonInKm(lat, lng, doc.data().lat, doc.data().lng);
+                docsWithDistance.push({ id: doc.id, distance: distance });
             });
-            queriedIDSet = intersection(queriedIDSet, q1Set);
         });
+    return docsWithDistance;
+}
+
+function sortByDistance(toSort, sortOrder) {
+    if (sortOrder === "desc") {
+        toSort.sort((a, b) => b.distance - a.distance);
+    } else if (sortOrder === "asc") {
+        toSort.sort((a, b) => a.distance - b.distance);
+    }
 }
 
 async function getSpotsByParams(lat, lng, distance, verified, price, rating, sort, sortOrder) {
     var spots = db.collection("spots");
-
     let allSpots;
     if (sort != null) {
-        if (sort === "distance") {
-            allSpots = null;
-        } else {
+        if (sort != "distance") {
             allSpots = await spots.orderBy(sort, sortOrder).get();
+        } else {
+            allSpots = [];
         }
     } else {
         allSpots = await spots.get();
     }
-
     let queriedIDSet = getIDSet(allSpots);
 
     if (distance != null && (lat != null && lng != null)) {
-        let q1Set = new Set();
-        await spots.get()
-            .then(allSpots => {
-                allSpots.forEach(doc => {
-                    if (getDistanceFromLatLonInKm(lat, lng, doc.data().lat, doc.data().lng) <= distance) {
-                        q1Set.add(doc.id);
-                    }
-                });
-                queriedIDSet = intersection(queriedIDSet, q1Set);
-            });
+        queriedIDSet = new Set();
+        let docsWithDistance = await getDistances(lat, lng);
+        if (sort === "distance") {
+            sortByDistance(docsWithDistance, sortOrder);
+        }
+        docsWithDistance.forEach((doc) => {
+            if (doc.distance <= distance) {
+                queriedIDSet.add(doc.id);
+            }
+        });
     }
 
     if (verified != null) {
@@ -81,8 +85,6 @@ async function getSpotsByParams(lat, lng, distance, verified, price, rating, sor
         let q4Set = getIDSet(q4);
         queriedIDSet = intersection(queriedIDSet, q4Set);
     }
-
-
 
     resetTemplates();
     queriedIDSet.forEach(spotID => {
