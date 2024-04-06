@@ -21,6 +21,10 @@ function deg2rad(deg) {
     return deg * (Math.PI / 180)
 }
 
+function setCardDistance(docWithDistance) {
+    document.getElementById(docWithDistance.id).innerHTML = docWithDistance.distance.toFixed(1) + "km away";
+}
+
 async function getDistances(lat, lng) {
     let docsWithDistance = [];
     await db.collection("spots").get()
@@ -54,10 +58,10 @@ async function getSpotsByParams(lat, lng, distance, verified, price, rating, sor
         allSpots = await spots.get();
     }
     let queriedIDSet = getIDSet(allSpots);
-
+    let docsWithDistance;
     if (distance != null && (lat != null && lng != null)) {
         queriedIDSet = new Set();
-        let docsWithDistance = await getDistances(lat, lng);
+        docsWithDistance = await getDistances(lat, lng);
         if (sort === "distance") {
             sortByDistance(docsWithDistance, sortOrder);
         }
@@ -90,6 +94,10 @@ async function getSpotsByParams(lat, lng, distance, verified, price, rating, sor
     queriedIDSet.forEach(spotID => {
         spots.doc(spotID).get().then(doc => {
             fillTemplates(doc);
+            if (distance != null && (lat != null && lng != null)) {
+                let docWithDistance = docsWithDistance.find((elem) => elem.id === doc.id);
+                setCardDistance(docWithDistance);
+            }
         });
     });
 }
@@ -154,6 +162,7 @@ function fillTemplates(doc) {
                     var avgRating = "Unrated";
                 }
                 newcard.querySelector('.card-rating').innerHTML = avgRating;
+                newcard.querySelector('.card-distance').id = doc.id;
                 newcard.querySelector('a').href = "spot.html?docID="+docID;
                 document.getElementById('reviews-holder').appendChild(newcard);
 }
