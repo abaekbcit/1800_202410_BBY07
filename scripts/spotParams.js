@@ -1,3 +1,5 @@
+let lat;
+let lng;
 let distance;
 let verified;
 let selectedVerified;
@@ -6,14 +8,76 @@ let selectedPrice = [];
 let rating;
 let sort;
 let selectedSort;
+let sortOrder = "desc";
+let selectedSortOrder;
+let autocompleteSearchAddr;
+
+function initAutocompletes() {
+    //Gives an option to use current location in the autocomplete bar
+	setTimeout(function(){
+        $(".pac-container").append(`<div id="areasearch" class="pac-item areasearch" onmousedown="useCurrentLocation()">
+                                        <span class="pac-icon pac-icon-areas">
+                                        </span><span class="pac-item-query">
+                                        <span class="pac-matched"></span>Current Location</span> 
+                                    </div>`);
+    }, 500);
+    //Constraints to search range to restrict search area to roughly Greater Vancouver area
+    const sw = { lat: 48.978508, lng: -123.397751};
+    const ne = { lat: 49.423439, lng: -122.653118};
+    const cornerBounds = new google.maps.LatLngBounds(sw, ne);
+
+    autocompleteSearchAddr = new google.maps.places.Autocomplete(
+        document.getElementById('autocomplete-search-addr'),
+        {
+            types: ['address'],
+            componentRestrictions: { 'country': ['CA'] },
+            fields: ['geometry.location', 'formatted_address'],
+        }
+    );
+    autocompleteSearchAddr.setBounds(cornerBounds);
+    autocompleteSearchAddr.setOptions({ strictBounds: true });
+    autocompleteSearchAddr.addListener('place_changed', onSearchAddrChanged);
+}
+
+function useCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+            document.getElementById('autocomplete-search-addr').value = "";
+            document.getElementById('autocomplete-search-addr').placeholder = "Using current location";
+            if (distance != null) {
+                onParamsChanged();
+            }
+        });
+    }  
+}
+
+function onSearchAddrChanged() {
+    const place = autocompleteSearchAddr.getPlace();
+    let location = place.geometry.location;
+    document.getElementById('autocomplete-search-addr').placeholder = "Search near";
+    if (location) {
+        lat = location.lat();
+        lng = location.lng();
+        if (distance != null) {
+            onParamsChanged();
+        }
+    }
+}
+
+function resetSearchAddr() {
+    document.getElementById('autocomplete-search-addr').value = "";
+    lat = null;
+    lng = null;
+}
 
 function onParamsChanged() {
-    //clean vals here
-    //verified to boolean
     if (verified != null) {
         var verifiedBool = (verified === "verified");
     }
-    getSpotsByParams(distance, verifiedBool, price, rating, sort);
+    let order = (sortOrder != null) ? sortOrder : "desc";
+    getSpotsByParams(lat, lng, distance, verifiedBool, price, rating, sort, order);
 }
 
 function toggleParamModal(param) {
@@ -30,6 +94,7 @@ function toggleparamButton(button, state) {
 }
 
 function resetAllParams() {
+    resetSearchAddr();
     resetDistance();
     resetVerified();
     resetPrice();
@@ -91,7 +156,10 @@ document.getElementById('distance-param-reset').addEventListener('click', () => 
 document.getElementById('distance-param-apply').addEventListener('click', () => {
     toggleparamButton(distanceParamButton, on);
     distance = parseInt(distanceRange.value);
-    onParamsChanged();
+    if (lat != null & lng != null) {
+        onParamsChanged();
+
+    }
 });
 
 document.getElementById('distance-param-close').addEventListener('click', () => {
@@ -254,6 +322,7 @@ document.getElementById('rating-param-close').addEventListener('click', () => {
 
 let sortParamButton = document.getElementById('spot-params-sort');
 let sortButtons = document.querySelectorAll('.sort-btn');
+let sortOrderButtons = document.querySelectorAll('.sort-order-btn');
 
 sortParamButton.addEventListener('click', () => {
     toggleParamModal('sort');
@@ -261,6 +330,12 @@ sortParamButton.addEventListener('click', () => {
 
 function selectSortButton(e) {
     let darkBtn = "btn btn-dark col sort-btn";
+    e.target.className = darkBtn;
+}
+
+//TODO: Consider abstracting with other select
+function selectSortOrderButton(e) {
+    let darkBtn = "btn btn-dark col sort-order-btn";
     e.target.className = darkBtn;
 }
 
@@ -272,11 +347,23 @@ sortButtons.forEach((btn) => {
     });
 });
 
+sortOrderButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        selectedSortOrder = e.target.value;
+        unselectAllButtons(sortOrderButtons, "sort-order");
+        selectSortOrderButton(e);
+    });
+});
+
 function resetSort() {
     toggleparamButton(sortParamButton, off);
     unselectAllButtons(sortButtons, "sort");
+    unselectAllButtons(sortOrderButtons, "sort-order");
+    document.getElementById("sort-order-desc").className = "btn btn-dark col sort-order-btn";
     sort = null;
     selectedSort = null;
+    sortOrder = "desc";
+    selectedSortOrder = null;
 }
 
 document.getElementById('sort-param-reset').addEventListener('click', () => {
@@ -287,6 +374,7 @@ document.getElementById('sort-param-reset').addEventListener('click', () => {
 document.getElementById('sort-param-apply').addEventListener('click', () => {
     toggleparamButton(sortParamButton, on);
     sort = selectedSort;
+    sortOrder = selectedSortOrder;
     onParamsChanged();
 });
 

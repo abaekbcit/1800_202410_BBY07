@@ -190,7 +190,7 @@ manualEntry.addEventListener('submit', function(e) {
             let zip = document.getElementById('spot-man-zip').value;
             let lat = autoAddr.geometry.location.lat();
             let lng = autoAddr.geometry.location.lng();
-            let imgs = [document.getElementById('spot-man-img').value];
+            let imgs = "";
             let verified = false;
             submitSpot(name, category, parseInt(price), addr, city, zip, lat, lng, imgs, verified, e);
         } else {
@@ -224,10 +224,12 @@ function submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, veri
                 e.target.reset();
                 if (e.target.id === 'spot-search-form') {
                     resetSpotSearch();
+                } else {
+                    if (document.getElementById("spot-man-img-goes-here").src != "") {
+                        uploadPic(spotID); //use the document id to call uploadPic function
+                    }
                 }
                 spotSubmittedAlert();
-
-                uploadPic(spotID); //use the document id to call uploadPic function
 
             });
         }
@@ -247,16 +249,16 @@ viewSpot.addEventListener('click', function(e) {
 
 var ImageFile;
 function listenFileSelect() {
-      // listen for file selection
-      var fileInput = document.getElementById("spot-man-img"); // pointer #1
-      const image = document.getElementById("spot-man-img-goes-here"); // pointer #2
+    // listen for file selection
+    var fileInput = document.getElementById("spot-man-img"); // pointer #1
+    const image = document.getElementById("spot-man-img-goes-here"); // pointer #2
 
-			// When a change happens to the File Chooser Input
-      fileInput.addEventListener('change', function (e) {
-          ImageFile = e.target.files[0];   //Global variable
-          var blob = URL.createObjectURL(ImageFile);
-          image.src = blob; // Display this image
-      })
+    // When a change happens to the File Chooser Input
+    fileInput.addEventListener('change', function (e) {
+        ImageFile = e.target.files[0];   //Global variable
+        var blob = URL.createObjectURL(ImageFile);
+        image.src = blob; // Display this image
+    });
 }
 listenFileSelect();
 
@@ -274,13 +276,12 @@ function uploadPic(postDocID) {
                  // AFTER .getDownloadURL is done
                 .then(function (url) { // Get URL of the uploaded file
                     console.log("3. Got the download URL.");
-                    
+
                     // Now that the image is on Storage, we can go back to the
                     // post document, and update it with an "image" field
                     // that contains the url of where the picture is stored.
                     db.collection("spots").doc(postDocID).update({
-
-                            "imgs": [url] // Save the URL into users collection
+                            "image": url // Save the URL into users collection
                         })
                          // AFTER .update is done
                         .then(function () {
@@ -289,10 +290,10 @@ function uploadPic(postDocID) {
                             // save this postID into an array for the OWNER
                             // so we can show "my posts" in the future
                             // savePostIDforUser(postDocID);
-                        })
-                })
+                        });
+                });
         })
         .catch((error) => {
              console.log("error uploading to cloud storage");
-        })
+        });
 }
