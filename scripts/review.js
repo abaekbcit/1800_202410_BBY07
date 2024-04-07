@@ -14,7 +14,7 @@ let currentUserPromise = new Promise((resolve, reject) => {
 function displayReviewInfo() {
     let params = new URL(window.location.href); //get URL of search bar
     let ID = params.searchParams.get("docID"); //get value for key "id"
-   
+
 
     // doublecheck: is your collection called "Reviews" or "reviews"?
     db.collection("reviews")
@@ -34,7 +34,7 @@ function displayReviewInfo() {
 
             document.title = title;
             document.getElementById("review-title").innerHTML = title;
-            
+
             let reviewSpot = document.getElementById("review-spot");
             reviewSpot.innerHTML = spot;
             reviewSpot.href = "spot.html?docID=" + doc.data().spotID;;
@@ -43,14 +43,14 @@ function displayReviewInfo() {
             authorReview.innerHTML = author;
 
             let reviewImg = document.getElementById("review-img");
-            reviewImg.src = img;    
+            reviewImg.src = img;
             // document.getElementById("review-author").innerHTML = author;
 
             document.getElementById("review-content").innerHTML = text;
             document.getElementById("review-addr").innerHTML = addr + ", " + city;
 
 
-            
+
             document.getElementById("review-date").innerHTML = date;
             document.getElementById("review-rating").innerHTML = rating;
 
@@ -65,8 +65,8 @@ function checkFavorite() {
     currentUserPromise.then(currentUser => {
         let params = new URL(window.location.href); //get URL of search bar
         let reviewID = params.searchParams.get("docID"); //get value for key "id"
-        let star = document.getElementById('star1');        
-        
+        let star = document.getElementById('star1');
+
         currentUser.get().then(doc => {
             let favorites = doc.data().favorites;
             console.log(favorites);
@@ -76,9 +76,9 @@ function checkFavorite() {
                 star.textContent = 'star_outline';
             }
         });
-    
+
     })
-    
+
 }
 
 checkFavorite();
@@ -109,20 +109,71 @@ function favoriteReview() {
     };
 };
 
+function displayDeleteButton() {
+    
 
-                // console.log(currentUser.favorites);
+
+    currentUserPromise.then(currentUser => {
+        let params = new URL(window.location.href); //get URL of search bar
+        let user = firebase.auth().currentUser;
+        let reviewID = params.searchParams.get("docID"); //get value for key "id"
+        console.log(reviewID);
+        console.log(user.uid);
+
+        db.collection("reviews").doc(reviewID).get().then(doc => {
+            let authorID = doc.get('authorID');
+            console.log(authorID);
+            if (user.uid !== authorID) {
+                let deleteButton = document.getElementById('delete-button');
+                deleteButton.style.visibility = 'hidden';
+            }
+        });
+
+    });
+        
+
+}
+
+displayDeleteButton();
+
+function deleteReview() {
+    let params = new URL(window.location.href); //get URL of search bar
+    let reviewID = params.searchParams.get("docID"); //get value for key "id"
+    let user = firebase.auth().currentUser;
+    console.log(user);
+
+    if (user) {
+        db.collection("reviews").doc(reviewID).get().then(doc => {
+            let authorID = doc.get('authorID');
+            if (user.uid === authorID) {
+                db.collection("reviews").doc(reviewID).delete().then(() => {
+                    console.log("Review deleted");
+                    window.location.href = "my_review_list.html";
+                });
+
+            } else {
+                console.log("You are not the author of this review");
+            }
+        });
+    }
+
+}
 
 
-                // db.collection("users").doc(user.uid).get().then(doc => {
-                //     let docFav = doc.get('favorites')
-                //     if (docFav) {
-                //         var favorites = docFav.concat(reviewID);
-                //     } else {
-                //         var favorites = [reviewID]
-                //     }
-                //     db.collection("users").doc(user.uid).update({
-                //         "favorites": favorites
-                //     });
-                //     console.log(favorites)
-                // });
+// console.log(currentUser.favorites);
+
+
+// db.collection("users").doc(user.uid).get().then(doc => {
+//     let docFav = doc.get('favorites')
+//     if (docFav) {
+//         var favorites = docFav.concat(reviewID);
+//     } else {
+//         var favorites = [reviewID]
+//     }
+//     db.collection("users").doc(user.uid).update({
+//         "favorites": favorites
+//     });
+//     console.log(favorites)
+// });
+
 
