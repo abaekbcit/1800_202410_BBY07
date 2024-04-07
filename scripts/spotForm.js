@@ -54,14 +54,19 @@ async function initMap(lat, lng, name) {
     });
 }
 
+function beautifyType(type) {
+    let res = type.replace("_", " ");
+    return (res.charAt(0).toUpperCase() + res.substring(1));
+}
+
 function onPlaceChanged() {
     const place = autocompletePlace.getPlace();
     let location = place.geometry.location;
     if (location) {
         document.getElementById('autocomplete-place').value = place.name;
         document.getElementById('spot-auto-addr').value = place.formatted_address;
-        let type = place.types[0];
-        document.getElementById('spot-auto-category').value = type.charAt(0).toUpperCase() + type.substring(1);
+        let type = beautifyType(place.types[0]);
+        document.getElementById('spot-auto-category').value = type;
         document.getElementById('spot-icon').src = place.icon;
         loadCarousel(place.photos);
         initMap(location.lat(), location.lng(), place.name);
@@ -155,7 +160,7 @@ spotSearch.addEventListener('submit', function(e) {
     if (place) {
         let name = place.name;
         if (name === document.getElementById('autocomplete-place').value) {
-        let category = place.types[0];
+        let category = beautifyType(place.types[0]);
         let price = (place.price_level)? place.price_level : 0;
         let addrParts = place.formatted_address.split(', ');
         let addr = addrParts[0];
