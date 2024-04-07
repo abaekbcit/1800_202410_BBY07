@@ -7,7 +7,7 @@ reviewForm.addEventListener('submit', function(e) {
     let city = document.getElementById('input-rv-city').value;
     let spotRating = document.getElementById('input-rv-spot-rating').value;
     let text = document.getElementById('input-rv-textarea').value;
-    let img = document.getElementById('input-rv-img').value;
+    let img = "";
     addReview(title, spot, addr, city, spotRating, text, img);
 });
 
@@ -38,7 +38,9 @@ function addReview(title, spot, addr, city, spotRating, text, img) {
                 reviewID = res.id;
                 reviewForm.reset();
                 reviewPostedAlert();
-                uploadPic(reviewID);
+                if (document.getElementById("input-rv-img-goes-here").src != "") {
+                    uploadPic(reviewID);
+                }
             });
             db.collection("spots").doc(spotID).get().then(doc => {
                 let ratingsAvg = doc.get('ratingsAvg');
