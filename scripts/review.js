@@ -109,9 +109,7 @@ function favoriteReview() {
     };
 };
 
-function displayDeleteButton() {
-    
-
+function displayDeleteAndFavoriteButton() {
 
     currentUserPromise.then(currentUser => {
         let params = new URL(window.location.href); //get URL of search bar
@@ -123,18 +121,22 @@ function displayDeleteButton() {
         db.collection("reviews").doc(reviewID).get().then(doc => {
             let authorID = doc.get('authorID');
             console.log(authorID);
-            if (user.uid !== authorID) {
+            if (user.uid !== authorID) { //if the current user is not the author of the review
                 let deleteButton = document.getElementById('delete-button');
-                deleteButton.style.visibility = 'hidden';
+                deleteButton.style.visibility = 'hidden'; //hide the delete button
+
+                
+            } else { //if the current user is the author of the review
+                let favoriteButton = document.getElementById('star1');
+                favoriteButton.style.visibility = 'hidden'; //hide the favorite button
             }
         });
 
     });
         
-
 }
 
-displayDeleteButton();
+displayDeleteAndFavoriteButton();
 
 function deleteReview() {
     let params = new URL(window.location.href); //get URL of search bar
