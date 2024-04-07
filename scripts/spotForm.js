@@ -281,12 +281,12 @@ function uploadPic(postDocID) {
                  // AFTER .getDownloadURL is done
                 .then(function (url) { // Get URL of the uploaded file
                     console.log("3. Got the download URL.");
-                    let img = [url];
+
                     // Now that the image is on Storage, we can go back to the
                     // post document, and update it with an "image" field
                     // that contains the url of where the picture is stored.
                     db.collection("spots").doc(postDocID).update({
-                            "imgs": img // Save the URL into users collection
+                            "image": url // Save the URL into users collection
                         })
                          // AFTER .update is done
                         .then(function () {
