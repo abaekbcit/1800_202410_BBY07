@@ -124,7 +124,7 @@ function uploadPic(postDocID) {
                     // that contains the url of where the picture is stored.
                     db.collection("reviews").doc(postDocID).update({
 
-                            "imgs": url // Save the URL into users collection
+                            "img": url // Save the URL into users collection
                         })
                          // AFTER .update is done
                         .then(function () {

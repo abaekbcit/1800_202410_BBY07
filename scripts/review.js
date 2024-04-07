@@ -26,6 +26,8 @@ function displayReviewInfo() {
             var author = doc.data().author;
             var date = doc.data().date;
             var rating = doc.data().rating;
+            var img = doc.data().img;
+            console.log(img);
 
             document.title = title;
             document.getElementById("review-title").innerHTML = title;
@@ -37,6 +39,8 @@ function displayReviewInfo() {
             let authorReview = document.getElementById("review-author");
             authorReview.innerHTML = author;
 
+            let reviewImg = document.getElementById("review-img");
+            reviewImg.src = img;    
             // document.getElementById("review-author").innerHTML = author;
 
             document.getElementById("review-content").innerHTML = text;
