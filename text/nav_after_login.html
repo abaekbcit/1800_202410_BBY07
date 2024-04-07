@@ -22,7 +22,7 @@
                 <a class="nav-link" href="spot_form.html">Add a Spot</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     My
                 </a>
@@ -31,10 +31,30 @@
                     <a class="dropdown-item" href="my_review_list.html">Reviews</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Preferences</a>
-                </div>
+                </div> -->
+                <button class="btn  nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    My
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="my_review_list.html">Reviews</a></li>
+                    <li><a class="dropdown-item" href="my_favorite_reviews.html">Favorite Reviews</a></li>
+                  </ul>
+                
             </li>
 
         </ul>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Dropdown button
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+
+
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-dark my-2 my-sm-0" type="submit" style="background-color: #ffb6d2;">Search</button>
