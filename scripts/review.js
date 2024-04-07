@@ -84,6 +84,7 @@ function checkFavorite() {
 checkFavorite();
 
 
+//-------------Favorite Review-----------------//
 function favoriteReview() {
     let params = new URL(window.location.href); //get URL of search bar
     let reviewID = params.searchParams.get("docID"); //get value for key "id"
@@ -138,6 +139,35 @@ function displayDeleteAndFavoriteButton() {
 
 displayDeleteAndFavoriteButton();
 
+
+//-----------------Delete Review-----------------//
+
+let deleteButton = document.getElementById('delete-button');
+
+function toggleParamModal(param) {
+    let modalToToggle = param + '-param-modal';
+    var modal = new bootstrap.Modal(document.getElementById(modalToToggle)); 
+    modal.toggle(); 
+}
+
+let off = "btn btn-light dropdown-toggle col";
+let on = "btn btn-dark dropdown-toggle col";
+
+function toggleparamButton(button, state) {
+    button.className = state;
+}
+
+
+deleteButton.addEventListener('click', () => {
+    toggleParamModal('delete');
+});
+
+document.getElementById('delete-param-yes').addEventListener('click', () => {
+    deleteReview();
+});
+
+
+
 function deleteReview() {
     let params = new URL(window.location.href); //get URL of search bar
     let reviewID = params.searchParams.get("docID"); //get value for key "id"
@@ -160,22 +190,4 @@ function deleteReview() {
     }
 
 }
-
-
-// console.log(currentUser.favorites);
-
-
-// db.collection("users").doc(user.uid).get().then(doc => {
-//     let docFav = doc.get('favorites')
-//     if (docFav) {
-//         var favorites = docFav.concat(reviewID);
-//     } else {
-//         var favorites = [reviewID]
-//     }
-//     db.collection("users").doc(user.uid).update({
-//         "favorites": favorites
-//     });
-//     console.log(favorites)
-// });
-
 

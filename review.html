@@ -68,7 +68,7 @@
                                 </h5>
                                 <time class="col-2" id="review-date">Date</time>
                                 <div id="delete-button" class=" col-5">
-                                    <button class="review-delete-btn" onclick="deleteReview()">
+                                    <button class="review-delete-btn">
                                         <i class="bi bi-trash-fill"></i></button>
 
                                 </div>
@@ -101,6 +101,28 @@
                 </article>
             </div>
         </div>
+
+        <div id="delete-param-modal" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Delete the Review?</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="delete-param-close"></button>
+                </div>
+                
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="delete-param-no">No</button>
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="delete-param-yes">Yes!</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
     </div>
     <!-- our own footer goes here-->
     <nav id="footerPlaceholder"></nav>
