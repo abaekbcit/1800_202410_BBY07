@@ -73,6 +73,7 @@ function fillTemplates(doc) {
     let cardTemplate = document.getElementById("reviewCardTemplate");
     var title = doc.data().title;
     var img = doc.data().img;
+    console.log(img);
     var spot = doc.data().spot;
     var text = doc.data().text;
     var city = doc.data().city;
@@ -81,7 +82,7 @@ function fillTemplates(doc) {
 
     newcard.querySelector('.card-title').innerHTML = title;
     //TODO: Probably have to change to make image work
-    newcard.querySelector('.card-image').innerHTML = img;
+    newcard.querySelector('.card-image').src = img;
     newcard.querySelector('.card-spot').innerHTML = spot;
     newcard.querySelector('.card-city').innerHTML = city;
     newcard.querySelector('a').href = "review.html?docID=" + docID;
