@@ -43,7 +43,9 @@ function displayReviewInfo() {
             authorReview.innerHTML = author;
 
             let reviewImg = document.getElementById("review-img");
-            reviewImg.src = img;
+            if (img) {
+                reviewImg.src = img;
+            }
             // document.getElementById("review-author").innerHTML = author;
 
             document.getElementById("review-content").innerHTML = text;

@@ -82,7 +82,9 @@ function fillTemplates(doc) {
 
     newcard.querySelector('.card-title').innerHTML = title;
     //TODO: Probably have to change to make image work
-    newcard.querySelector('.card-image').src = img;
+    if (img) {
+        newcard.querySelector('.card-image').src = img;
+    }
     newcard.querySelector('.card-spot').innerHTML = spot;
     newcard.querySelector('.card-city').innerHTML = city;
     newcard.querySelector('a').href = "review.html?docID=" + docID;
