@@ -1,10 +1,14 @@
-var currentUser;
-
-firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-        currentUser = db.collection("users").doc(user.uid); //global
-        console.log(currentUser);
-    }
+//Create a promise that resolves to the current user
+let currentUserPromise = new Promise((resolve, reject) => {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            currentUser = db.collection("users").doc(user.uid); //global
+            console.log(currentUser);
+            resolve(currentUser);
+        } else {
+            reject("No user is signed in");
+        }
+    });
 });
 
 function displayReviewInfo() {
@@ -27,7 +31,6 @@ function displayReviewInfo() {
             var date = doc.data().date;
             var rating = doc.data().rating;
             var img = doc.data().img;
-            console.log(img);
 
             document.title = title;
             document.getElementById("review-title").innerHTML = title;
@@ -57,10 +60,28 @@ function displayReviewInfo() {
 }
 displayReviewInfo();
 
+//Check if the review is in the user's favorites
+function checkFavorite() {
+    currentUserPromise.then(currentUser => {
+        let params = new URL(window.location.href); //get URL of search bar
+        let reviewID = params.searchParams.get("docID"); //get value for key "id"
+        let star = document.getElementById('star1');        
+        
+        currentUser.get().then(doc => {
+            let favorites = doc.data().favorites;
+            console.log(favorites);
+            if (favorites.includes(reviewID)) {
+                star.textContent = 'star'; //set the star button to filled
+            } else {
+                star.textContent = 'star_outline';
+            }
+        });
+    
+    })
+    
+}
 
-
-
-
+checkFavorite();
 
 
 function favoriteReview() {
@@ -71,7 +92,7 @@ function favoriteReview() {
     if (star.textContent === 'star_outline') {
         console.log("Clicked");
         star.textContent = 'star';//set the star button to filled
-
+        console.log(currentUser);
         //add the reviewID to user's favorites array
         currentUser.update({
             favorites: firebase.firestore.FieldValue.arrayUnion(reviewID)
