@@ -29,7 +29,7 @@ function displayReviewInfo() {
             var addr = doc.data().addr;
             var author = doc.data().author;
             var date = doc.data().date;
-            var rating = doc.data().rating;
+            var rating = doc.data().spotRating;
             var img = doc.data().img;
 
             document.title = title;
@@ -184,6 +184,11 @@ function deleteReview() {
                     console.log("Review deleted");
                     window.location.href = "my_review_list.html";
                 });
+                var storageRef = storage.ref("images/" + reviewID + ".jpg");
+                storageRef.delete().then(() => {
+                    console.log("Image deleted");
+                });
+                
 
             } else {
                 console.log("You are not the author of this review");
