@@ -39,30 +39,41 @@ function displayMyFavoriteReviews() {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             const userID = user.uid;
-
+            const userName = user.displayName
             //select the current user doc
             db.collection("users").doc(userID).get()
                 .then(user => {
-                    console.log(user.data().favorites);
-                    //select the favorites array of the current user
-                    user.data().favorites.forEach(reviewID => {
-                        console.log(reviewID);
-                        //for each review id stored in the favorite array, get the review doc
-                        db.collection("reviews").doc(reviewID).get()
-                            .then(doc => {
-                                fillTemplates(doc);
-                            })
-                    });
+                    let favorites = user.data().favorites;
+                    if (favorites == null || favorites.length === 0) {
+                        let html = `<div class="my-5">
+                                        <h2>Oops! looks like you have no favourited reviews</h2>
+                                        <br/>
+                                        <h4>Go to the <a href="review_list.html">reviews</a> page to read some!</h4>
+                                    </div>`;
+                        document.getElementById('reviews-holder').innerHTML =  html;
+                    } else {
+                        let html = `<div class="my-5">
+                                        <h3>${userName}'s favourite reviews</h3>
+                                    </div>`;
+                        document.getElementById('reviews-container').insertAdjacentHTML("afterbegin", html);
+                        favorites.forEach(reviewID => {
+                            //for each review id stored in the favorite array, get the review doc
+                            db.collection("reviews").doc(reviewID).get()
+                                .then(doc => {
+                                    fillTemplates(doc);
+                                });
+                        });
+                    }
                 });
         }
     });
 }
 
-
 function fillTemplates(doc) {
     let cardTemplate = document.getElementById("reviewCardTemplate");
     var title = doc.data().title;
     var img = doc.data().img;
+    console.log(img);
     var spot = doc.data().spot;
     var text = doc.data().text;
     var city = doc.data().city;
@@ -71,7 +82,9 @@ function fillTemplates(doc) {
 
     newcard.querySelector('.card-title').innerHTML = title;
     //TODO: Probably have to change to make image work
-    newcard.querySelector('.card-image').innerHTML = img;
+    if (img) {
+        newcard.querySelector('.card-image').src = img;
+    }
     newcard.querySelector('.card-spot').innerHTML = spot;
     newcard.querySelector('.card-city').innerHTML = city;
     newcard.querySelector('a').href = "review.html?docID=" + docID;

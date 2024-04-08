@@ -54,14 +54,19 @@ async function initMap(lat, lng, name) {
     });
 }
 
+function beautifyType(type) {
+    let res = type.replace("_", " ");
+    return (res.charAt(0).toUpperCase() + res.substring(1));
+}
+
 function onPlaceChanged() {
     const place = autocompletePlace.getPlace();
     let location = place.geometry.location;
     if (location) {
         document.getElementById('autocomplete-place').value = place.name;
         document.getElementById('spot-auto-addr').value = place.formatted_address;
-        let type = place.types[0];
-        document.getElementById('spot-auto-category').value = type.charAt(0).toUpperCase() + type.substring(1);
+        let type = beautifyType(place.types[0]);
+        document.getElementById('spot-auto-category').value = type;
         document.getElementById('spot-icon').src = place.icon;
         loadCarousel(place.photos);
         initMap(location.lat(), location.lng(), place.name);
@@ -155,7 +160,7 @@ spotSearch.addEventListener('submit', function(e) {
     if (place) {
         let name = place.name;
         if (name === document.getElementById('autocomplete-place').value) {
-        let category = place.types[0];
+        let category = beautifyType(place.types[0]);
         let price = (place.price_level)? place.price_level : 0;
         let addrParts = place.formatted_address.split(', ');
         let addr = addrParts[0];
@@ -190,9 +195,9 @@ manualEntry.addEventListener('submit', function(e) {
             let zip = document.getElementById('spot-man-zip').value;
             let lat = autoAddr.geometry.location.lat();
             let lng = autoAddr.geometry.location.lng();
-            // let imgs = [document.getElementById('spot-man-img').value];
+            let imgs = "";
             let verified = false;
-            submitSpot(name, category, parseInt(price), addr, city, zip, lat, lng, verified, e);
+            submitSpot(name, category, parseInt(price), addr, city, zip, lat, lng, imgs, verified, e);
         } else {
             invalidAlert("addr");
         }
@@ -201,7 +206,7 @@ manualEntry.addEventListener('submit', function(e) {
     }
 });
 
-function submitSpot(name, category, price, addr, city, zip, lat, lng, verified, e) {
+function submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, verified, e) {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             const userID = user.uid;
@@ -216,7 +221,7 @@ function submitSpot(name, category, price, addr, city, zip, lat, lng, verified, 
                 zip: zip,
                 lat: lat,
                 lng: lng,
-                // imgs: imgs,
+                imgs: imgs,
                 verified: verified
                 
             }).then(function(res) {
@@ -224,10 +229,12 @@ function submitSpot(name, category, price, addr, city, zip, lat, lng, verified, 
                 e.target.reset();
                 if (e.target.id === 'spot-search-form') {
                     resetSpotSearch();
+                } else {
+                    if (document.getElementById("spot-man-img-goes-here").src != "") {
+                        uploadPic(spotID); //use the document id to call uploadPic function
+                    }
                 }
                 spotSubmittedAlert();
-
-                uploadPic(spotID); //use the document id to call uploadPic function
 
             });
         }
@@ -247,16 +254,16 @@ viewSpot.addEventListener('click', function(e) {
 
 var ImageFile;
 function listenFileSelect() {
-      // listen for file selection
-      var fileInput = document.getElementById("spot-man-img"); // pointer #1
-      const image = document.getElementById("spot-man-img-goes-here"); // pointer #2
+    // listen for file selection
+    var fileInput = document.getElementById("spot-man-img"); // pointer #1
+    const image = document.getElementById("spot-man-img-goes-here"); // pointer #2
 
-			// When a change happens to the File Chooser Input
-      fileInput.addEventListener('change', function (e) {
-          ImageFile = e.target.files[0];   //Global variable
-          var blob = URL.createObjectURL(ImageFile);
-          image.src = blob; // Display this image
-      })
+    // When a change happens to the File Chooser Input
+    fileInput.addEventListener('change', function (e) {
+        ImageFile = e.target.files[0];   //Global variable
+        var blob = URL.createObjectURL(ImageFile);
+        image.src = blob; // Display this image
+    });
 }
 listenFileSelect();
 
@@ -274,12 +281,12 @@ function uploadPic(postDocID) {
                  // AFTER .getDownloadURL is done
                 .then(function (url) { // Get URL of the uploaded file
                     console.log("3. Got the download URL.");
-
+                    let img = [url];
                     // Now that the image is on Storage, we can go back to the
                     // post document, and update it with an "image" field
                     // that contains the url of where the picture is stored.
                     db.collection("spots").doc(postDocID).update({
-                            "image": url // Save the URL into users collection
+                        "imgs": img // Save the URL into users collection
                         })
                          // AFTER .update is done
                         .then(function () {
@@ -288,10 +295,10 @@ function uploadPic(postDocID) {
                             // save this postID into an array for the OWNER
                             // so we can show "my posts" in the future
                             // savePostIDforUser(postDocID);
-                        })
-                })
+                        });
+                });
         })
         .catch((error) => {
              console.log("error uploading to cloud storage");
-        })
+        });
 }

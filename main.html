@@ -33,10 +33,18 @@
 <body>
 
     <nav id="navbarPlaceholder"></nav>
-
+    <div class="container-fluid bg-light text-dark p-1">
+      <div class="container bg-light p-1">
+          <h1 class="display-4">What's your plan today, <span id="name-goes-here"></span></h1>
+          
+      </div>
+  </div>
     <div class="container">
         <div class="row">
             <div class="col-lg">
+              <div class="row">
+                <input id="autocomplete-search-addr" class="form-control col" placeholder="Search near" type="text" required />
+              </div>
                 <div class=" my-2" id="spot-params">
                   <div class="inner">
                     <button class="btn btn-light dropdown-toggle " type="button" id="spot-params-distance">
@@ -72,7 +80,7 @@
         <!-- Here is the container for cards  -->
         <div class="containerCards" id="reviews-container">
           <div class="row">
-            <button type="reset" class="btn btn-light float-right" id="reset-params-button">Reset</button>
+            <button type="reset" class="btn btn-light float-right" id="reset-params-button">Reset All</button>
           </div>
           <div id="reviews-holder" class="row row-cols-auto">
           </div>
@@ -87,13 +95,16 @@
             <h3 class="card-title">Card title</h3>
             <hr/>
             <div class="row"> 
-                <p class="card-city col-md-12 verified-entrance" style="display:inline-block;">placeholder</p>
+              <p class="card-city col-md-12 verified-entrance" style="display:inline-block;">placeholder</p>
             </div> 
             <div class="row">
-                <p class="card-cat-price">placeholder</p>
+              <p class="card-cat-price">placeholder</p>
             </div>
             <div>
-                <p class="card-rating">Unrated</p>
+              <p class="card-rating">Unrated</p>
+            </div>
+            <div>
+              <p class="card-distance"></p>
             </div>
             <a class="btn btn-primary card-href">Details</a>
           </div>
@@ -110,7 +121,7 @@
             <div class="modal-body">
                 <div class="row mx-2">
                   <output class="mx-2" id="distance-range-desc">Up to 0km</output>
-                  <input type="range" class="form-range" value="0" min="0" max="100" step="1" id="distance-param-range"
+                  <input type="range" class="form-range" value="0" min="0" max="30" step="1" id="distance-param-range"
                     oninput="this.previousElementSibling.value = 'Up to ' + this.value + 'km'" required>
                 </div>
             </div>
@@ -198,14 +209,24 @@
             </div>
             <div class="modal-body">
                 <div class="mx-2">
-                    <button type="button" class="btn btn-light col sort-btn" value="ratingsAvg">Rating</button>
-                    <button type="button" class="btn btn-light col sort-btn" value="distance">Distance</button>
-                    <button type="button" class="btn btn-light col sort-btn" value="price">Price</button>
+                    <div class="row">
+                      <button type="button" class="btn btn-light col sort-btn" value="ratingsAvg">Rating</button>
+                    </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-light col sort-btn" value="distance">Distance</button>
+                    </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-light col sort-btn" value="price">Price</button>
+                    </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-dark col sort-order-btn" value="desc" id="sort-order-desc">Descending</button>
+                      <button type="button" class="btn btn-light col sort-order-btn" value="asc" id="sort-order-asc">Ascending</button>        
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="sort-param-reset">Reset</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="sort-param-apply">Apply</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="sort-param-reset">Reset</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="sort-param-apply">Apply</button>  
             </div>
           </div>
         </div>
@@ -214,11 +235,12 @@
     <nav id="footerPlaceholder"></nav>
 
     <script src="./scripts/firebaseAPI_BBY07.js"></script>
+    <script src="./scripts/googleAPI.js"></script>
     <script src="./scripts/skeleton.js"></script>
     <script src="./scripts/script.js"></script>
     <script src="./scripts/getSpots.js"></script>
     <script src="./scripts/spotParams.js"></script>
-    <script src="./scripts/getLocation.js"></script>
+    <script src="./scripts/main.js"></script>
     <script>
         getSpotsByParams(null, null, null, null, null);
     </script>

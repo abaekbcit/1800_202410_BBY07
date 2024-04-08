@@ -7,7 +7,7 @@ reviewForm.addEventListener('submit', function(e) {
     let city = document.getElementById('input-rv-city').value;
     let spotRating = document.getElementById('input-rv-spot-rating').value;
     let text = document.getElementById('input-rv-textarea').value;
-    let img = document.getElementById('input-rv-img').value;
+    let img = "";
     addReview(title, spot, addr, city, spotRating, text, img);
 });
 
@@ -38,6 +38,9 @@ function addReview(title, spot, addr, city, spotRating, text, img) {
                 reviewID = res.id;
                 reviewForm.reset();
                 reviewPostedAlert();
+                if (document.getElementById("input-rv-img-goes-here").src != "") {
+                    uploadPic(reviewID);
+                }
             });
             db.collection("spots").doc(spotID).get().then(doc => {
                 let ratingsAvg = doc.get('ratingsAvg');
@@ -86,3 +89,56 @@ let backToReview = document.getElementById('back-to-review');
 backToReview.addEventListener('click', function(e) {
     window.location.assign("spot.html?docID=" + spotID);
 })
+
+
+var ImageFile;
+function listenFileSelect() {
+      // listen for file selection
+      var fileInput = document.getElementById("input-rv-img"); // pointer #1
+      const image = document.getElementById("input-rv-img-goes-here"); // pointer #2
+
+			// When a change happens to the File Chooser Input
+      fileInput.addEventListener('change', function (e) {
+          ImageFile = e.target.files[0];   //Global variable
+          var blob = URL.createObjectURL(ImageFile);
+          image.src = blob; // Display this image
+      })
+}
+listenFileSelect();
+
+function uploadPic(postDocID) {
+    console.log("inside uploadPic " + postDocID);
+    var storageRef = storage.ref("images/" + postDocID + ".jpg");
+
+    storageRef.put(ImageFile)   //global variable ImageFile
+       
+                   // AFTER .put() is done
+        .then(function () {
+            console.log('2. Uploaded to Cloud Storage.');
+            storageRef.getDownloadURL()
+
+                 // AFTER .getDownloadURL is done
+                .then(function (url) { // Get URL of the uploaded file
+                    console.log("3. Got the download URL.");
+                    
+                    // Now that the image is on Storage, we can go back to the
+                    // post document, and update it with an "image" field
+                    // that contains the url of where the picture is stored.
+                    db.collection("reviews").doc(postDocID).update({
+
+                            "img": url // Save the URL into users collection
+                        })
+                         // AFTER .update is done
+                        .then(function () {
+                            console.log('4. Added pic URL to Firestore.');
+                            // One last thing to do:
+                            // save this postID into an array for the OWNER
+                            // so we can show "my posts" in the future
+                            // savePostIDforUser(postDocID);
+                        })
+                })
+        })
+        .catch((error) => {
+             console.log("error uploading to cloud storage");
+        })
+}

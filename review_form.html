@@ -32,6 +32,7 @@
   <nav id="navbarPlaceholder"></nav>
 
   <div class="container">
+    <h1>Post a review</h1>
     <div class="row">
       <div class="col-lg">
         <form class="row g-3" id="review-form">
@@ -70,10 +71,13 @@
           <div class="col-12">
             <label for="input-rv-img">Add a picture:</label>
             <input type="file" id="input-rv-img" name="input-rv-img" accept="image/png, image/jpeg" />
+            <img id="input-rv-img-goes-here" width=500 height=350 />
+
           </div>
           <div class="col-12">
-            <button type="submit" class="btn btn-secondary" id="post-review">Post</button>
             <button type="reset" class="btn btn-secondary">Reset</button>
+
+            <button type="submit" class="btn btn-secondary" id="post-review">Post</button>
           </div>
         </form>
       </div>
