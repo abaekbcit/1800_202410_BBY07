@@ -1,3 +1,7 @@
+body{
+    overflow-x: hidden;
+}
+
 #instaRec {
     display: flex;
     justify-content: center;
@@ -55,3 +59,19 @@ a:active {
     display: inline-block;
     margin: 1%
 }
+
+
+.row{
+    width: 90vw;
+    
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+#reviews-holder{
+    display: flex;
+    justify-content: center;
+  }
