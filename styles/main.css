@@ -62,16 +62,18 @@ a:active {
 
 
 .row{
-    width: 90vw;
+    /* width: 60vw; */
     
 }
 
 .container{
     display: flex;
     justify-content: center;
+    
 }
 
 #reviews-holder{
     display: flex;
     justify-content: center;
+    width: 90vw;
   }
