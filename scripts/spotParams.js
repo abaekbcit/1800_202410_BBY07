@@ -56,7 +56,7 @@ function useCurrentLocation() {
 function onSearchAddrChanged() {
     const place = autocompleteSearchAddr.getPlace();
     let location = place.geometry.location;
-    document.getElementById('autocomplete-search-addr').placeholder = "Search near";
+    document.getElementById('autocomplete-search-addr').placeholder = "Enter an address or use current location";
     if (location) {
         lat = location.lat();
         lng = location.lng();
