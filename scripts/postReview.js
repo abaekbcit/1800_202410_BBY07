@@ -16,6 +16,19 @@ let reviewID;
 let params = new URL(window.location.href);
 let spotID = params.searchParams.get("docID");
 
+function resetReviewFields() {
+    document.getElementById('input-rv-title').value = null;
+    document.getElementById('input-rv-spot-rating').value = 0;
+    document.getElementById('rv-rating-output').innerHTML = 0/5;
+    document.getElementById('input-rv-textarea').value = null;
+    document.getElementById('input-rv-img').value = null;
+    document.getElementById('input-rv-img-goes-here').src = "";
+}
+
+document.getElementById('reset-review').addEventListener('click', () => {
+    resetReviewFields();
+});
+
 function addReview(title, spot, addr, city, spotRating, text, img) {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -36,7 +49,7 @@ function addReview(title, spot, addr, city, spotRating, text, img) {
                 rating: 0
             }).then(function(res) {
                 reviewID = res.id;
-                reviewForm.reset();
+                resetReviewFields();
                 reviewPostedAlert();
                 if (document.getElementById("input-rv-img-goes-here").src != "") {
                     uploadPic(reviewID);
