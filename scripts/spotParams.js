@@ -68,6 +68,7 @@ function onSearchAddrChanged() {
 
 function resetSearchAddr() {
     document.getElementById('autocomplete-search-addr').value = "";
+    document.getElementById('autocomplete-search-addr').placeholder = "Enter an address or use current location";
     lat = null;
     lng = null;
 }

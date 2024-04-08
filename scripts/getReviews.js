@@ -15,9 +15,24 @@ function displayMyReviews() {
             //select those reviews where the key "authorID" is equal to current user's userID
             db.collection("reviews").where("authorID", "==", userID).get()
                 .then(myReviews => {
+                    let empty = true;
                     myReviews.forEach(doc => {
-                        fillTemplates(doc);
+                            empty = false;
+                            fillTemplates(doc);
                     });
+                    if (empty) {
+                        let html = `<div class="my-5">
+                                        <h2>Oops! looks like you haven't written any reviews yet</h2>
+                                        <br/>
+                                        <h4>Go to some spots on the <a href="main.html">home</a> page to write some!</h4>
+                                    </div>`;
+                        document.getElementById('reviews-holder').innerHTML =  html;
+                    } else {
+                        let html = `<div class="my-5">
+                                        <h3>Reviews written by ${user.displayName}</h3>
+                                    </div>`;
+                        document.getElementById('reviews-container').insertAdjacentHTML("afterbegin", html);
+                    }
                 });
         }
     });
