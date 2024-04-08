@@ -161,7 +161,7 @@ function fillTemplates(doc) {
                 } else {
                     var avgRating = "Unrated";
                 }
-                newcard.querySelector('.card-rating').innerHTML = avgRating;
+                newcard.querySelector('.card-rating').innerHTML = "Rating: " + avgRating;
                 newcard.querySelector('.card-distance').id = doc.id;
                 newcard.querySelector('a').href = "spot.html?docID="+docID;
                 document.getElementById('reviews-holder').appendChild(newcard);
