@@ -3,6 +3,12 @@ body {
     background-color: rgb(209, 209, 209);
 }
 
+.responsive {
+  width: 100%;
+  height: auto;
+}
+
+
 img {
   max-width: 100%;
 }
