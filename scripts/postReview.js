@@ -46,7 +46,6 @@ function addReview(title, spot, addr, city, spotRating, text, img) {
                 city: city,
                 text: text,
                 img: img,
-                rating: 0
             }).then(function(res) {
                 reviewID = res.id;
                 resetReviewFields();

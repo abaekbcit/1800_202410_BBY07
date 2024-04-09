@@ -54,7 +54,7 @@ function displayReviewInfo() {
 
 
             document.getElementById("review-date").innerHTML = date;
-            document.getElementById("review-rating").innerHTML = rating;
+            document.getElementById("review-rating").innerHTML = "Rating: " + rating + "/5";
 
 
 
