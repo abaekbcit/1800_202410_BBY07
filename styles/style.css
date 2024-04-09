@@ -1,6 +1,7 @@
 /* TODO: Change once colour pallete picked*/
 body {
     background-color: rgb(209, 209, 209);
+    padding-top: 56px;
 }
 
 .responsive {
