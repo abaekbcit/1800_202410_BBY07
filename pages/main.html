@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Home</title>
+  <meta name="comp1800 template" content="My 1800 App">
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap Library CSS CDN go here -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <!-- Boostrap Library JS CDN  go here -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+  <!-- Firebase 8 Library related CSS, JS, JQuery go here -->
+  <!-------------------------------------------------------->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+  <link href="/styles/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <nav id="navbarPlaceholder"></nav>
+  <div class="container-fluid bg-light text-dark p-1">
+    <div class="container bg-light p-1">
+      <h1 class="display-4">What's your plan today, <span id="name-goes-here"></span>?</h1>
+
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg">
+        <div class="row">
+          <input id="autocomplete-search-addr" class="form-control col"
+            placeholder="Enter an address or use current location " type="text" required />
+        </div>
+        <div class=" my-2" id="spot-params">
+          <div class="inner">
+            <button class="btn btn-light dropdown-toggle " type="button" id="spot-params-distance">
+              Distance
+            </button>
+          </div>
+          <div class="inner">
+            <button class="btn btn-light dropdown-toggle " type="button" id="spot-params-verified">
+              Verified
+            </button>
+          </div>
+          <div class="inner">
+            <button class="btn btn-light dropdown-toggle " type="button" id="spot-params-price">
+              Price
+            </button>
+          </div>
+          <div class="inner">
+            <button class="btn btn-light dropdown-toggle " type="button" id="spot-params-rating">
+              Rating
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Here is the container for cards  -->
+    <div class="containerCards" id="reviews-container">
+      <div class="col-lg">
+        <div class="inner" style="text-align: center;">
+          <button class="btn btn-light dropdown-toggle " type="button" id="spot-params-sort">
+            Sort
+          </button>
+        </div>
+        <button type="reset" class="btn btn-light float-right" id="reset-params-button">Reset All</button>
+      </div>
+      <div id="reviews-holder" class="row row-cols-auto">
+      </div>
+    </div>
+  </div>
+
+  <!-- Templates for general use, not displayed -->
+  <template id="reviewCardTemplate">
+    <div class="card py-2 my-2 mx-2 container" style="width: 20rem">
+      <img class="card-image card-img-top" src="https://dummyimage.com/800x400/b3b3b3/000000&text=+" />
+      <div class="card-body">
+        <h3 class="card-title">Card title</h3>
+        <hr />
+        <div class="row">
+          <p class="card-city col-md-12 verified-entrance" style="display:inline-block;">placeholder</p>
+        </div>
+        <div class="row">
+          <p class="card-cat-price">placeholder</p>
+        </div>
+        <div>
+          <p class="card-rating">Unrated</p>
+        </div>
+        <div>
+          <p class="card-distance"></p>
+        </div>
+        <a class="btn btn-primary card-href">Details</a>
+      </div>
+    </div>
+  </template>
+
+  <div id="distance-param-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Distance</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            id="distance-param-close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mx-2">
+            <output class="mx-2" id="distance-range-desc">Up to 0km</output>
+            <input type="range" class="form-range" value="0" min="0" max="30" step="1" id="distance-param-range"
+              oninput="this.previousElementSibling.value = 'Up to ' + this.value + 'km'" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            id="distance-param-reset">Reset</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="distance-param-apply">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="verified-param-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Verified</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            id="verified-param-close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mx-2 gap-1">
+            <button type="button" class="btn btn-light col verified-btn" value="verified">Verified only</button>
+            <button type="button" class="btn btn-light col verified-btn" value="unverified">Unverified only</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            id="verified-param-reset">Reset</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="verified-param-apply">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="price-param-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Price</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            id="price-param-close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mx-2 gap-1">
+            <button type="button" class="btn btn-light col price-btn" value="0">Free</button>
+            <button type="button" class="btn btn-light col price-btn" value="1">$</button>
+            <button type="button" class="btn btn-light col price-btn" value="2">$$</button>
+            <button type="button" class="btn btn-light col price-btn" value="3">$$$</button>
+            <button type="button" class="btn btn-light col price-btn" value="4">$$$$</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="price-param-reset">Reset</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="price-param-apply">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rating-param-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Rating</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            id="rating-param-close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mx-2">
+            <output class="mx-2" id="rating-range-desc">0 and above</output>
+            <input type="range" class="form-range" value="0" min="0" max="5" step="0.5" id="rating-param-range"
+              oninput="this.previousElementSibling.value = this.value + ' and above'" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="rating-param-reset">Reset</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="rating-param-apply">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sort-param-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Sort</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            id="sort-param-close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mx-2">
+            <div class="row">
+              <button type="button" class="btn btn-light col sort-btn" value="ratingsAvg">Rating</button>
+            </div>
+            <div class="row">
+              <button type="button" class="btn btn-light col sort-btn" value="distance">Distance</button>
+            </div>
+            <div class="row">
+              <button type="button" class="btn btn-light col sort-btn" value="price">Price</button>
+            </div>
+            <div class="row">
+              <button type="button" class="btn btn-dark col sort-order-btn" value="desc"
+                id="sort-order-desc">Descending</button>
+              <button type="button" class="btn btn-light col sort-order-btn" value="asc"
+                id="sort-order-asc">Ascending</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="sort-param-reset">Reset</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="sort-param-apply">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav id="footerPlaceholder"></nav>
+
+  <script src="/scripts/firebaseAPI_BBY07.js"></script>
+  <script src="/scripts/googleAPI.js"></script>
+  <script src="/scripts/skeleton.js"></script>
+  <script src="/scripts/spot_scripts/getSpots.js"></script>
+  <script src="/scripts/spot_scripts/spotParams.js"></script>
+  <script src="/scripts/main.js"></script>
+  <script>
+    getSpotsByParams(null, null, null, null, null);
+  </script>
+
+</body>
+
+</html>

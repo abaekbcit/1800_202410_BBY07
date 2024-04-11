@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>My Reviews</title>
+  <title>Welcome to UpToDate!</title>
   <meta name="comp1800 template" content="My 1800 App">
 
   <!------------------------>
@@ -50,33 +50,10 @@
   <!-- the body of your page goes here -->
   <!-- stuff -->
   <div class="container">
-    <!-- Here is the container for cards  -->
-    <div class="container" id="reviews-container">
-      <div id="reviews-holder" class="row row-cols-auto">
-      </div>
-    </div>
+    <h1>Start your Date!</h1>
   </div>
-
-
-  <!-- Templates for general use, not displayed -->
-  <template id="reviewCardTemplate">
-    <div class="card py-2 my-2 mx-2" style="width: 20rem">
-      <img class="card-image card-img-top" src="https://dummyimage.com/800x400/b3b3b3/000000&text=+" />
-      <div class="card-body">
-        <h3 class="card-title">Card title</h3>
-        <h5 class="card-spot">placeholder</h5>
-        <p class="card-city">placeholder</p>
-        <hr />
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-        <a class="btn btn-primary card-href">Read more</a>
-      </div>
-    </div>
-  </template>
-
-
+  <div id="firebaseui-auth-container"></div>
+  <div id="loader">Loading...</div>
 
   <!-- our own footer goes here-->
   <nav id="footerPlaceholder"></nav>
@@ -84,14 +61,9 @@
   <!---------------------------------------------->
   <!-- Your own JavaScript functions go here    -->
   <!---------------------------------------------->
-  <script src="./scripts/firebaseAPI_BBY07.js"></script>
-  <script src="./scripts/skeleton.js"></script>
-  <script src="./scripts/script.js"></script>
-  <script src="./scripts/getReviews.js"></script>
-  <script>
-    displayMyReviews();
-  </script>
-
+  <script src="/scripts/firebaseAPI_BBY07.js"></script>
+  <script src="/scripts/skeleton.js"></script>
+  <script src="/scripts/authentication.js"></script>
 
 </body>
 

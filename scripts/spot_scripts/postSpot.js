@@ -5,11 +5,15 @@ let autocompleteAddr;
 
 let spotID;
 
+//Initializes 2 Google map autocomplete input bars. Strictly constrains both to search only within the Greater
+//Vancouver area. Fields are given appropriately to receive data needed later on.
 function initAutocompletes() {
     //Constraints to search range for better search results
-    const sw = { lat: 48.978508, lng: -123.397751};
-    const ne = { lat: 49.423439, lng: -122.653118};
+    const sw = { lat: 48.978508, lng: -123.397751 };
+    const ne = { lat: 49.423439, lng: -122.653118 };
     const cornerBounds = new google.maps.LatLngBounds(sw, ne);
+
+    //Autocomplete that only works with places/establishments
     autocompletePlace = new google.maps.places.Autocomplete(
         document.getElementById('autocomplete-place'),
         {
@@ -22,6 +26,7 @@ function initAutocompletes() {
     autocompletePlace.setOptions({ strictBounds: true });
     autocompletePlace.addListener('place_changed', onPlaceChanged);
 
+    //Autocomplete that only works with addresses
     autocompleteAddr = new google.maps.places.Autocomplete(
         document.getElementById('autocomplete-addr'),
         {
@@ -35,6 +40,8 @@ function initAutocompletes() {
     autocompleteAddr.addListener('place_changed', onAddrChanged);
 }
 
+//Initializes a Google map along with a marker. Location is set to the coordinates received from 
+//the autocompletePlace input.
 async function initMap(lat, lng, name) {
     const position = { lat: lat, lng: lng };
     // Request needed libraries.
@@ -54,11 +61,15 @@ async function initMap(lat, lng, name) {
     });
 }
 
+//Turns the type field received from Google API into something more visually appealing
+//Ex. point_of_interest  ->  Point of interest
 function beautifyType(type) {
     let res = type.replace("_", " ");
     return (res.charAt(0).toUpperCase() + res.substring(1));
 }
 
+//Fills out the fields on the spot search form, displays a carousel of images of the place and a map
+//to the location of the place once a place is selected in the autocompletePlace input.
 function onPlaceChanged() {
     const place = autocompletePlace.getPlace();
     let location = place.geometry.location;
@@ -79,6 +90,7 @@ function onPlaceChanged() {
     }
 }
 
+//Fills out the fields on the manual entry form once a place is selected in the autocompleteAddr input.
 function onAddrChanged() {
     const place = autocompleteAddr.getPlace();
     let addr = place.formatted_address;
@@ -90,6 +102,7 @@ function onAddrChanged() {
     }
 }
 
+//Loads an image carousel with given photos.
 function loadCarousel(photos) {
     document.getElementById('carousel-slide-entrance').innerHTML = "";
     if (photos) {
@@ -108,8 +121,9 @@ function loadCarousel(photos) {
     }
 }
 
+//Handles switching between the spot search and manual entry tabs. Hides one while displaying the other.
 function tabSelection(event, tab) {
-    switch(tab) {
+    switch (tab) {
         case 0:
             spotSearch.style.display = "flex";
             manualEntry.style.display = "none";
@@ -124,6 +138,7 @@ function tabSelection(event, tab) {
     event.currentTarget.className = "nav-link active spot-tab";
 }
 
+//Modal to let user know an invalid entry has been attempted to be submitted.
 function invalidAlert(source) {
     let title;
     let text;
@@ -136,44 +151,46 @@ function invalidAlert(source) {
     }
     document.getElementById('invalid-modal-title').innerHTML = title;
     document.getElementById('invalid-modal-text').innerHTML = text;
-    var modal = new bootstrap.Modal(document.getElementById('invalid-modal')); 
-    modal.toggle(); 
+    var modal = new bootstrap.Modal(document.getElementById('invalid-modal'));
+    modal.toggle();
 }
 
-document.getElementById('invalid-search-manual').addEventListener('click', function(e) {
-    tabSelection({currentTarget: document.getElementById('manual-tab')}, 1);
+document.getElementById('invalid-search-manual').addEventListener('click', function (e) {
+    tabSelection({ currentTarget: document.getElementById('manual-tab') }, 1);
 })
 
-spotSearch.addEventListener('reset', function(e) {
+spotSearch.addEventListener('reset', function (e) {
     resetSpotSearch();
 });
 
+//Resets the spot icon, image carousel, and map of the spot search form.
 function resetSpotSearch() {
     document.getElementById('spot-icon').src = "";
     document.getElementById('carousel-slide-entrance').innerHTML = "";
     document.getElementById('map').innerHTML = "";
 }
 
-spotSearch.addEventListener('submit', function(e) {
+//Retrieves info about the spot from Google API and sends it off to be submitted by submitSpot().
+spotSearch.addEventListener('submit', function (e) {
     e.preventDefault();
     let place = autocompletePlace.getPlace();
     if (place) {
         let name = place.name;
         if (name === document.getElementById('autocomplete-place').value) {
-        let category = beautifyType(place.types[0]);
-        let price = (place.price_level)? place.price_level : 0;
-        let addrParts = place.formatted_address.split(', ');
-        let addr = addrParts[0];
-        let city = addrParts[1];
-        let zip = addrParts[2].substring(3);
-        let lat = place.geometry.location.lat();
-        let lng = place.geometry.location.lng();
-        let imgs = [];
-        place.photos.forEach((photo) => {
-            imgs.push(photo.getUrl());
-        });
-        let verified = true;
-        submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, verified, e);
+            let category = beautifyType(place.types[0]);
+            let price = (place.price_level) ? place.price_level : 0;
+            let addrParts = place.formatted_address.split(', ');
+            let addr = addrParts[0];
+            let city = addrParts[1];
+            let zip = addrParts[2].substring(3);
+            let lat = place.geometry.location.lat();
+            let lng = place.geometry.location.lng();
+            let imgs = [];
+            place.photos.forEach((photo) => {
+                imgs.push(photo.getUrl());
+            });
+            let verified = true;
+            submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, verified, e);
         } else {
             invalidAlert("place");
         }
@@ -182,7 +199,8 @@ spotSearch.addEventListener('submit', function(e) {
     }
 });
 
-manualEntry.addEventListener('submit', function(e) {
+//Retrieves info about the spot from the form's input values and sends it off to be submitted by submitSpot().
+manualEntry.addEventListener('submit', function (e) {
     e.preventDefault();
     let autoAddr = autocompleteAddr.getPlace();
     if (autoAddr) {
@@ -206,6 +224,7 @@ manualEntry.addEventListener('submit', function(e) {
     }
 });
 
+//Writes a spot document with the appropriate fields into the spots collection within the DB.
 function submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, verified, e) {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -223,8 +242,8 @@ function submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, veri
                 lng: lng,
                 imgs: imgs,
                 verified: verified
-                
-            }).then(function(res) {
+
+            }).then(function (res) {
                 spotID = res.id;
                 e.target.reset();
                 if (e.target.id === 'spot-search-form') {
@@ -241,18 +260,21 @@ function submitSpot(name, category, price, addr, city, zip, lat, lng, imgs, veri
     });
 }
 
+//Alerts user date spot has been submitted.
 function spotSubmittedAlert() {
-    var modal = new bootstrap.Modal(document.getElementById('spot-submitted-modal')); 
-    modal.toggle(); 
+    var modal = new bootstrap.Modal(document.getElementById('spot-submitted-modal'));
+    modal.toggle();
 }
 
 let viewSpot = document.getElementById('spot-submitted-view-spot');
-viewSpot.addEventListener('click', function(e) {
-    window.location.assign("spot.html?docID=" + spotID);
+viewSpot.addEventListener('click', function (e) {
+    window.location.assign("/pages/spot_pages/spot.html?docID=" + spotID);
 });
 
+//--------Image upload functions taken from 1800 Tech Tips (202410)
 
 var ImageFile;
+//Image uploaded in the form is passed to a variable for later use (storing to firebase Storage).
 function listenFileSelect() {
     // listen for file selection
     var fileInput = document.getElementById("spot-man-img"); // pointer #1
@@ -267,38 +289,27 @@ function listenFileSelect() {
 }
 listenFileSelect();
 
+//Stores image in firebaseStorage with the review's ID as the name of the image file.
 function uploadPic(postDocID) {
-    console.log("inside uploadPic " + postDocID);
     var storageRef = storage.ref("images/" + postDocID + ".jpg");
 
     storageRef.put(ImageFile)   //global variable ImageFile
-       
-                   // AFTER .put() is done
+        // AFTER .put() is done
         .then(function () {
-            console.log('2. Uploaded to Cloud Storage.');
             storageRef.getDownloadURL()
 
-                 // AFTER .getDownloadURL is done
+                // AFTER .getDownloadURL is done
                 .then(function (url) { // Get URL of the uploaded file
-                    console.log("3. Got the download URL.");
                     let img = [url];
                     // Now that the image is on Storage, we can go back to the
                     // post document, and update it with an "image" field
                     // that contains the url of where the picture is stored.
                     db.collection("spots").doc(postDocID).update({
                         "imgs": img // Save the URL into users collection
-                        })
-                         // AFTER .update is done
-                        .then(function () {
-                            console.log('4. Added pic URL to Firestore.');
-                            // One last thing to do:
-                            // save this postID into an array for the OWNER
-                            // so we can show "my posts" in the future
-                            // savePostIDforUser(postDocID);
-                        });
+                    })
                 });
         })
         .catch((error) => {
-             console.log("error uploading to cloud storage");
+            console.log("error uploading to cloud storage");
         });
 }

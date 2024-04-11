@@ -12,9 +12,11 @@ let sortOrder = "desc";
 let selectedSortOrder;
 let autocompleteSearchAddr;
 
+//Initializes a Google map autocomplete input bar. Strictly constrained to search only within the Greater
+//Vancouver area. Fields are given appropriately to receive data needed later on.
 function initAutocompletes() {
     //Gives an option to use current location in the autocomplete bar
-	setTimeout(function(){
+    setTimeout(function () {
         $(".pac-container").append(`<div id="areasearch" class="pac-item areasearch" onmousedown="useCurrentLocation()">
                                         <span class="pac-icon pac-icon-areas">
                                         </span><span class="pac-item-query">
@@ -22,10 +24,11 @@ function initAutocompletes() {
                                     </div>`);
     }, 500);
     //Constraints to search range to restrict search area to roughly Greater Vancouver area
-    const sw = { lat: 48.978508, lng: -123.397751};
-    const ne = { lat: 49.423439, lng: -122.653118};
+    const sw = { lat: 48.978508, lng: -123.397751 };
+    const ne = { lat: 49.423439, lng: -122.653118 };
     const cornerBounds = new google.maps.LatLngBounds(sw, ne);
 
+    //Autocomplete that only works with addresses
     autocompleteSearchAddr = new google.maps.places.Autocomplete(
         document.getElementById('autocomplete-search-addr'),
         {
@@ -39,6 +42,8 @@ function initAutocompletes() {
     autocompleteSearchAddr.addListener('place_changed', onSearchAddrChanged);
 }
 
+//Prompts user for access to user's current location. Sets lat and lng appropriately
+//if permitted.
 function useCurrentLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -50,9 +55,10 @@ function useCurrentLocation() {
                 onParamsChanged();
             }
         });
-    }  
+    }
 }
 
+//Set lat and lng to place's coordinates once a place is selected in the autocompleteSearchAddr input.
 function onSearchAddrChanged() {
     const place = autocompleteSearchAddr.getPlace();
     let location = place.geometry.location;
@@ -66,6 +72,7 @@ function onSearchAddrChanged() {
     }
 }
 
+//Resets autocompleteSearchAddr. Sets lat and lng to null.
 function resetSearchAddr() {
     document.getElementById('autocomplete-search-addr').value = "";
     document.getElementById('autocomplete-search-addr').placeholder = "Enter an address or use current location";
@@ -73,6 +80,7 @@ function resetSearchAddr() {
     lng = null;
 }
 
+//Calls getSpotsByParams with appropriate parameters (selected parameters as non-null values). Sort order is descending by default.
 function onParamsChanged() {
     if (verified != null) {
         var verifiedBool = (verified === "verified");
@@ -81,19 +89,22 @@ function onParamsChanged() {
     getSpotsByParams(lat, lng, distance, verifiedBool, price, rating, sort, order);
 }
 
+//Opens modal for given param.
 function toggleParamModal(param) {
     let modalToToggle = param + '-param-modal';
-    var modal = new bootstrap.Modal(document.getElementById(modalToToggle)); 
-    modal.toggle(); 
+    var modal = new bootstrap.Modal(document.getElementById(modalToToggle));
+    modal.toggle();
 }
 
 let off = "btn btn-light dropdown-toggle col";
 let on = "btn btn-dark dropdown-toggle col";
 
+//Toggles a given button to a given state through its class.
 function toggleparamButton(button, state) {
     button.className = state;
 }
 
+//Resets all the search parameters.
 function resetAllParams() {
     resetSearchAddr();
     resetDistance();
@@ -108,6 +119,7 @@ document.getElementById('reset-params-button').addEventListener('click', () => {
     resetAllParams();
 })
 
+//Unselects (change button appearance to light) for all buttons corresponding to param.
 function unselectAllButtons(buttons, param) {
     let lightBtn = "btn btn-light col " + param + "-btn";
     buttons.forEach((btn) => {
@@ -115,14 +127,16 @@ function unselectAllButtons(buttons, param) {
     });
 }
 
+//Keep selected buttons selected even when other options selected then modal closed without applying.
 function persistSelectedButton(buttons, value) {
     buttons.forEach((btn) => {
-        if(btn.value == value) {
+        if (btn.value == value) {
             btn.className = "btn btn-dark col price-btn";
         }
     });
 }
 
+//Sets the value for a range type input slider.
 function setRange(slider, val) {
     slider.value = val;
 }
@@ -136,12 +150,14 @@ distanceParamButton.addEventListener('click', () => {
     toggleParamModal('distance');
 });
 
+//Sets the distance range input slider to be labelled appropriately.
 function setDistanceRangeDesc() {
     let distanceRangeDesc = document.getElementById('distance-range-desc');
     let distInDesc = (distance != null) ? distance : 0;
     distanceRangeDesc.innerHTML = `Up to ${distInDesc}km`;
 }
 
+//Resets the distance parameter.
 function resetDistance() {
     toggleparamButton(distanceParamButton, off);
     distance = null;
@@ -182,6 +198,7 @@ verifiedParamButton.addEventListener('click', () => {
     toggleParamModal('verified');
 });
 
+//For selecting (changing appearance to dark) buttons in the verified parameter options.
 function selectVerifiedButton(e) {
     let darkBtn = "btn btn-dark col price-btn";
     e.target.className = darkBtn;
@@ -195,6 +212,7 @@ verifiedButtons.forEach((btn) => {
     });
 });
 
+//Resets the verified parameter.
 function resetVerified() {
     toggleparamButton(verifiedParamButton, off);
     unselectAllButtons(verifiedButtons, "verified");
@@ -229,10 +247,11 @@ priceParamButton.addEventListener('click', () => {
     toggleParamModal('price');
 });
 
+//Toggles a price button between two states (light/unselected and dark/selected).
 function togglePriceButton(e) {
     let unselected = "btn btn-light col price-btn"
     let selected = "btn btn-dark col price-btn"
-    e.target.className = e.target.className ===  unselected ? selected : unselected;
+    e.target.className = e.target.className === unselected ? selected : unselected;
 }
 
 priceButtons.forEach((btn) => {
@@ -242,6 +261,7 @@ priceButtons.forEach((btn) => {
     });
 });
 
+//Resets the price parameter.
 function resetPrice() {
     toggleparamButton(priceParamButton, off);
     unselectAllButtons(priceButtons, "price");
@@ -249,6 +269,7 @@ function resetPrice() {
     selectedPrice = [];
 }
 
+//Selected price buttons stay selected.
 function persistSelectedPrices() {
     priceButtons.forEach((btn) => {
         if (price.includes(parseInt(btn.value))) {
@@ -285,12 +306,14 @@ ratingParamButton.addEventListener('click', () => {
     toggleParamModal('rating');
 });
 
+//Sets the rating range input slider to be labelled appropriately.
 function setRatingRangeDesc() {
     let ratingRangeDesc = document.getElementById('rating-range-desc');
     let ratingInDesc = (rating != null) ? rating : 0;
     ratingRangeDesc.innerHTML = `${ratingInDesc} and above`;
 }
 
+//Resets the rating parameter.
 function resetRating() {
     toggleparamButton(ratingParamButton, off);
     rating = null;
@@ -329,12 +352,13 @@ sortParamButton.addEventListener('click', () => {
     toggleParamModal('sort');
 });
 
+//Selects (change appearance to dark) a sort button.
 function selectSortButton(e) {
     let darkBtn = "btn btn-dark col sort-btn";
     e.target.className = darkBtn;
 }
 
-//TODO: Consider abstracting with other select
+//Selects (change appearance to dark) an order button.
 function selectSortOrderButton(e) {
     let darkBtn = "btn btn-dark col sort-order-btn";
     e.target.className = darkBtn;
@@ -356,6 +380,7 @@ sortOrderButtons.forEach((btn) => {
     });
 });
 
+//Resets the sort parameter.
 function resetSort() {
     toggleparamButton(sortParamButton, off);
     unselectAllButtons(sortButtons, "sort");

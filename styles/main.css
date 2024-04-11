@@ -1,8 +1,6 @@
-body{
+body {
     overflow-x: hidden;
 }
-
-
 
 a:link {
     color: black;
@@ -38,15 +36,14 @@ a:active {
     margin-bottom: 1%;
 }
 
-
-.container{
+.container {
     display: flex;
     justify-content: center;
-    
+
 }
 
-#reviews-holder{
+#reviews-holder {
     display: flex;
     justify-content: center;
     width: 90vw;
-  }
+}

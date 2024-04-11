@@ -1,5 +1,5 @@
+//Displays all reviews
 function displayAllReviews() {
-    console.log("called");
     db.collection("reviews").get()
         .then(allReviews => {
             allReviews.forEach(doc => {
@@ -8,6 +8,8 @@ function displayAllReviews() {
         });
 }
 
+//Queries DB for only review documents written by logged in user. Those documents are then sent to 
+//fillTemplates() to display the docs.
 function displayMyReviews() {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -17,16 +19,16 @@ function displayMyReviews() {
                 .then(myReviews => {
                     let empty = true;
                     myReviews.forEach(doc => {
-                            empty = false;
-                            fillTemplates(doc);
+                        empty = false;
+                        fillTemplates(doc);
                     });
                     if (empty) {
                         let html = `<div class="my-5">
                                         <h2>Oops! looks like you haven't written any reviews yet</h2>
                                         <br/>
-                                        <h4>Go to some spots on the <a href="main.html">home</a> page to write some!</h4>
+                                        <h4>Go to some spots on the <a href="/pages/main.html">home</a> page to write some!</h4>
                                     </div>`;
-                        document.getElementById('reviews-holder').innerHTML =  html;
+                        document.getElementById('reviews-holder').innerHTML = html;
                     } else {
                         let html = `<div class="my-5">
                                         <h3>Reviews written by ${user.displayName}</h3>
@@ -38,6 +40,8 @@ function displayMyReviews() {
     });
 }
 
+//Queries the DB for reviews that are written for a particular spot. Sends the resulting 
+// documents to be displayed by fillTemplates()
 function displayReviewsBySpot() {
     let params = new URL(window.location.href);
     let spotID = params.searchParams.get("docID");
@@ -50,6 +54,9 @@ function displayReviewsBySpot() {
         });
 }
 
+//Queries DB for only reviews that are favorited by the logged in user. Sends the resulting
+//documents to be displayed by fillTemplates(). If no user has no written review, displays a
+//generic message indicating so.
 function displayMyFavoriteReviews() {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -61,14 +68,14 @@ function displayMyFavoriteReviews() {
                     let favorites = user.data().favorites;
                     if (favorites == null || favorites.length === 0) {
                         let html = `<div class="my-5">
-                                        <h2>Oops! looks like you have no favourited reviews</h2>
+                                        <h2>Oops! looks like you have no favorited reviews</h2>
                                         <br/>
-                                        <h4>Go to the <a href="review_list.html">reviews</a> page to read some!</h4>
+                                        <h4>Go to the <a href="/pages/review_pages/all_reviews.html">reviews</a> page to read some!</h4>
                                     </div>`;
-                        document.getElementById('reviews-holder').innerHTML =  html;
+                        document.getElementById('reviews-holder').innerHTML = html;
                     } else {
                         let html = `<div class="my-5">
-                                        <h3>${userName}'s favourite reviews</h3>
+                                        <h3>${userName}'s favorite reviews</h3>
                                     </div>`;
                         document.getElementById('reviews-container').insertAdjacentHTML("afterbegin", html);
                         favorites.forEach(reviewID => {
@@ -84,11 +91,11 @@ function displayMyFavoriteReviews() {
     });
 }
 
+//Fills review card templates with data from doc
 function fillTemplates(doc) {
     let cardTemplate = document.getElementById("reviewCardTemplate");
     var title = doc.data().title;
     var img = doc.data().img;
-    console.log(img);
     var spot = doc.data().spot;
     var text = doc.data().text;
     var city = doc.data().city;
@@ -96,13 +103,12 @@ function fillTemplates(doc) {
     let newcard = cardTemplate.content.cloneNode(true);
 
     newcard.querySelector('.card-title').innerHTML = title;
-    //TODO: Probably have to change to make image work
     if (img) {
         newcard.querySelector('.card-image').src = img;
     }
     newcard.querySelector('.card-spot').innerHTML = spot;
     newcard.querySelector('.card-city').innerHTML = city;
-    newcard.querySelector('a').href = "review.html?docID=" + docID;
+    newcard.querySelector('a').href = "/pages/review_pages/review.html?docID=" + docID;
 
     if (text.length > 20) {
         text = text.substring(0, 50) + "...";
