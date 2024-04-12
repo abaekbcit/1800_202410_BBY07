@@ -1,4 +1,4 @@
-# Project Title
+# Up To Date
 
 ## 1. Project Description
 State your app in a nutshell, or one-sentence pitch. Give some elaboration on what the core features are.  
@@ -14,8 +14,9 @@ List team members and/or short bio's here...
 List technologies (with version numbers), API's, icons, fonts, images, media or data sources, and other resources that were used.
 * HTML, CSS, JavaScript
 * Bootstrap 5.0 (Frontend library)
-* Firebase 8.0 (BAAS - Backend as a Service)
-* ...
+* Firebase 8.0 ( BAAS - Backend as a Service - Authentication, Firestore, Storage, Hosting)
+* Google Places, Maps API
+* Google, Bootstrap icons
 
 ## 4. Complete setup/installion/usage
 State what a user needs to do when they come to your project.  How do others start using your code or application?
@@ -32,9 +33,11 @@ Here are some known bugs:
 
 ## 6. Features for Future
 What we'd like to build in the future:
-* ...
-* ...
-* ...
+* Pagination for displayed cards
+* Using category as a parameter for querying date spots
+* Some level of checking to keep date spots unique (minimize chances of duplicate entries)
+* Refreshing image URLs given by Google places API before expiration
+* More styling in general
 	
 ## 7. Contents of Folder
 Content of the project folder:
@@ -48,9 +51,25 @@ Content of the project folder:
 It has the following subfolders and files:
 ├── .git                     # Folder for git repo
 ├── images                   # Folder for images
-    /blah.jpg                # Acknowledge source
+    /google-maps.png         # Google Maps icon (from wikimedia commons)
+    /logo.png                # Logo made by Andre
+
 ├── scripts                  # Folder for scripts
-    /blah.js                 # 
+    ├── review_scripts       # Folder for scripts related to reviews
+        /getReview.js
+        /getReviews.js
+        /postReview.js
+    ├── spot_scripts         # Folder for scripts related to spots
+        /getSpot.js
+        /getSpots.js
+        postSpot.js
+        spotParams.js
+    /authentication.js
+    /firebaseAPI_BBY07.js
+    /googleAPI.js
+    /logout.js
+    /main.js
+    /skeleton.js
 ├── styles                   # Folder for styles
     /blah.css                # 
 
