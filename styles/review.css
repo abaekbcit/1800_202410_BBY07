@@ -1,0 +1,27 @@
+.review-rating-btn {
+    border: 0;
+}
+
+#review {
+    overflow: hidden;
+    background: #ffffff;
+    margin-top: 5%;
+}
+
+#review-info {
+    padding: 5%;
+    padding-bottom: 2%;
+}
+
+#review-body {
+    padding: 0% 5%;
+}
+
+#review-rating {
+    text-align: end;
+}
+
+#review-content {
+    margin: 5%;
+    margin-top: 1%;
+}
