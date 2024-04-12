@@ -1,0 +1,47 @@
+[debug] [2024-04-12T07:37:55.322Z] ----------------------------------------------------------------------
+[debug] [2024-04-12T07:37:55.324Z] Command:       C:\Users\lizio\DOWNLO~1\firebase-tools-instant-win.exe C:\Users\lizio\.cache\firebase\tools\lib\node_modules\firebase-tools\lib\bin\firebase deploy
+[debug] [2024-04-12T07:37:55.325Z] CLI Version:   13.7.2
+[debug] [2024-04-12T07:37:55.325Z] Platform:      win32
+[debug] [2024-04-12T07:37:55.325Z] Node Version:  v18.5.0
+[debug] [2024-04-12T07:37:55.326Z] Time:          Fri Apr 12 2024 00:37:55 GMT-0700 (GMT-07:00)
+[debug] [2024-04-12T07:37:55.326Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-04-12T07:37:55.420Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-04-12T07:37:55.421Z] > authorizing via signed-in user (lizion2004@gmail.com)
+[debug] [2024-04-12T07:37:55.421Z] [iam] checking project comp1800-202410-bby07 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-04-12T07:37:55.423Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/comp1800-202410-bby07:testIamPermissions [none]
+[debug] [2024-04-12T07:37:55.423Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/comp1800-202410-bby07:testIamPermissions x-goog-quota-user=projects/comp1800-202410-bby07
+[debug] [2024-04-12T07:37:55.424Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/comp1800-202410-bby07:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-04-12T07:37:55.734Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/comp1800-202410-bby07:testIamPermissions 200
+[debug] [2024-04-12T07:37:55.735Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/comp1800-202410-bby07:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-04-12T07:37:55.739Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/comp1800-202410-bby07 [none]
+[debug] [2024-04-12T07:37:55.942Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/comp1800-202410-bby07 200
+[debug] [2024-04-12T07:37:55.943Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/comp1800-202410-bby07 {"projectId":"comp1800-202410-bby07","projectNumber":"1015948546407","displayName":"COMP1800-202410-BBY07","name":"projects/comp1800-202410-bby07","resources":{"hostingSite":"comp1800-202410-bby07","storageBucket":"comp1800-202410-bby07.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_f1f97a1a-8f5f-4518-8c9a-9d7144bce305"}
+[info] 
+[info] === Deploying to 'comp1800-202410-bby07'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2024-04-12T07:37:56.004Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07:test [none]
+[debug] [2024-04-12T07:37:56.005Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07:test [omitted]
+[debug] [2024-04-12T07:37:56.345Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07:test 200
+[debug] [2024-04-12T07:37:56.346Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07:test {}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2024-04-12T07:37:56.356Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/comp1800-202410-bby07/versions [none]
+[debug] [2024-04-12T07:37:56.356Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/comp1800-202410-bby07/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2024-04-12T07:37:57.217Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/comp1800-202410-bby07/versions 200
+[debug] [2024-04-12T07:37:57.218Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/comp1800-202410-bby07/versions {"name":"projects/1015948546407/sites/comp1800-202410-bby07/versions/9632bdd42a8152d1","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  firestore: deploying indexes... 
+[debug] [2024-04-12T07:37:57.227Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07/releases pageSize=10&pageToken=
+[debug] [2024-04-12T07:37:57.239Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/comp1800-202410-bby07/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2024-04-12T07:37:57.577Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07/releases 200
+[debug] [2024-04-12T07:37:57.578Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07/releases {"releases":[{"name":"projects/comp1800-202410-bby07/releases/cloud.firestore","rulesetName":"projects/comp1800-202410-bby07/rulesets/1d960389-28dd-42d7-aa24-8a44cc92c742","createTime":"2024-03-18T19:27:35.280244Z","updateTime":"2024-04-11T23:26:37.818811Z"},{"name":"projects/comp1800-202410-bby07/releases/firebase.storage/comp1800-202410-bby07.appspot.com","rulesetName":"projects/comp1800-202410-bby07/rulesets/7be41ecd-c4c8-4014-a29c-da32bb3c9723","createTime":"2024-04-02T21:23:35.677541Z","updateTime":"2024-04-11T22:20:37.797563Z"}]}
+[debug] [2024-04-12T07:37:57.581Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07/rulesets/1d960389-28dd-42d7-aa24-8a44cc92c742 [none]
+[debug] [2024-04-12T07:37:57.629Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/comp1800-202410-bby07/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2024-04-12T07:37:57.629Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/comp1800-202410-bby07/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2024-04-12T07:37:57.630Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/comp1800-202410-bby07/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2024-04-12T07:37:57.890Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07/rulesets/1d960389-28dd-42d7-aa24-8a44cc92c742 200
+[debug] [2024-04-12T07:37:57.891Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/comp1800-202410-bby07/rulesets/1d960389-28dd-42d7-aa24-8a44cc92c742 [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[debug] [2024-04-12T07:37:57.961Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/comp1800-202410-bby07/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
