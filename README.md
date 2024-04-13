@@ -37,7 +37,6 @@ Here are some known bugs:
 * Image URLS given by Google API eventually expire. So any spots submitted through spot search form will have images that expire.
 * Ratings aren't recalculated on review deletion (deleted review's ratings still affect the date spot's ratings)
 * After deleting a spot from the DB, reviews related to that spot aren't deleted.
-* Uploading image for submitting a review or manual entry of a date spot no longer works (broke after some commit)
 * Some parts of pages don't show on mobile view.
 
 ## 6. Features for Future
